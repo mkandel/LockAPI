@@ -1,0 +1,12 @@
+/add/:service/:product/:host
+/add/:service/:product/:host/:expires
+
+/delete/:lockId
+/delete/:service/:product/:host
+/delete/:service/:product/:host/:expires
+
+/check/:lockId
+/check/:service/:product/:host
+
+/list/
+/add/:service/:product/:host
