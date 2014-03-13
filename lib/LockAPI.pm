@@ -8,7 +8,7 @@ sub startup {
     my $self = shift;
 
     ## Shutup supid secret warning ...
-    $self->secret('My very secret passphrase.');
+    $self->secret('My very secret motherfucking passphrase.');
 
     # Documentation browser under "/perldoc"
     $self->plugin('PODRenderer');
