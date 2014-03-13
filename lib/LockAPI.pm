@@ -18,6 +18,29 @@ sub startup {
 
     # Normal route to controller
     $r->get('/')->to('example#welcome');
+
+#    my $root = $r->under('/');
+    #$root->post('/list')->to('blog#list');
+#    $root->get(sub { shift->render(text => 'Go away!') });
+
+    ## API v1 routes
+    ## Add
+    $r->get('/v1/add/'   )->to( controller => 'LockAPI::Action::List', action => 'list' );
+
+    ## Delete
+    $r->get('/v1/delete/')->to('action::Delete#delete');
+
+    ## List
+    $r->get('/v1/list/'  )->to('action::List#list'    );
+    
+    ## Check
+    $r->get('/v1/check/' )->to('action::Check#check'  );
+
+    ## Modify
+    $r->get('/v1/modify/')->to('action::Modify#modify');
+
+    ## Default
+#    $r->get('/v1/'       )->render(text => 'Available actions: add delete list check modify');
 }
 
 1;
@@ -47,8 +70,9 @@ Copyright 2014- Marc Kandel
 
 =head1 LICENSE
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+This code is released as Apathyware:
+
+"The code doesn't care what you do with it, and neither do I."
 
 =head1 SEE ALSO
 
