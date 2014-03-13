@@ -1,4 +1,4 @@
-lockId - integer - autoincrement - non null - primary key
+lockId - integer - autoincrement - unique - non null - primary key
 service - varchar(100) - not null
 product - varchar(100) - not null
 host - varchar(200) - not null
@@ -6,15 +6,13 @@ created - datetime - not null
 expires - datetime - not null - default create + 24 hours?
 user - varchar(100) - not null
 app - varchar(100) - not null
-extra - blob - null ok
+extra - blob
 
-DSM:
-action: restore
-dataset: 2561
-host: app361.lab1.ariba.com
-product: buyer
-service: dev2
-status: Finished
-user: svcdev2
-
-
+DSM metadata:
+action: restorea                |
+dataset: 2561                   |
+host: app361.lab1.ariba.com     | X
+product: buyer                  | X
+service: dev2                   | X
+status: Finished                |
+user: svcdev2                   | X

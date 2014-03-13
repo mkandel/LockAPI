@@ -18,6 +18,8 @@ GetOptions(
 );
 
 my $fields = {
+    ## Field definitions so we can generate the SQL.
+    ## Since I'm a Perl guy and not a DBA this is easier to maintain than raw SQL
     'lock_id'   => { 'type' => 'INTEGER', 'key' => 1, 'null' => 0, 'unique' => 1, },
     'created'   => { 'type' => 'INTEGER', 'key' => 0, 'null' => 0, 'unique' => 0, },
     'expires'   => { 'type' => 'INTEGER', 'key' => 0, 'null' => 0, 'unique' => 0, },
@@ -38,7 +40,7 @@ EOT
 foreach my $field ( keys %{ $fields } ){
     $sql .= '    ' . $field . ' ' . $fields->{ $field }->{'type'};
     if ( $fields->{$field}->{'key'} ){
-        ## This is the primary key, needs special handling:
+        ## This is for the primary key, which needs special handling:
         $sql .= " PRIMARY KEY AUTOINCREMENT";
     }
     $sql .= $fields->{ $field }->{'unique'} ? ' UNIQUE' : '';
