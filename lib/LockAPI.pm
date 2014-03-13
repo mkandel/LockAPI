@@ -24,10 +24,10 @@ sub startup {
 
     ## API v1 routes
     ## Add
-    $r->get('/v1/add/'   )->to( 'action-add#add' );
+    $r->put('/v1/add/'   )->to( 'action-add#add' );
 
     ## Delete
-    $r->get('/v1/delete/')->to('action-delete#delete');
+    $r->put('/v1/delete/')->to('action-delete#delete');
 
     ## List
     $r->get('/v1/list/'  )->to('action-list#list'    );
@@ -36,7 +36,7 @@ sub startup {
     $r->get('/v1/check/' )->to('action-check#check'  );
 
     ## Modify
-    $r->get('/v1/modify/')->to('action-modify#modify');
+    $r->put('/v1/modify/')->to('action-modify#modify');
 
     ## Default
 #    $r->get('/v1/'       )->render(text => 'Available actions: add delete list check modify');
