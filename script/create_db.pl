@@ -19,11 +19,14 @@ GetOptions(
 
 my %fields = (
     'lock_id'   => { 'type' => 'INTEGER', 'key' => 1, 'null' => 0, 'unique' => 1, },
+    'created'   => { 'type' => 'INTEGER', 'key' => 1, 'null' => 0, 'unique' => 0, },
+    'expires'   => { 'type' => 'INTEGER', 'key' => 1, 'null' => 0, 'unique' => 0, },
     'service'   => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
     'product'   => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
     'host'      => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
-    'created'   => { 'type' => 'INTEGER', 'key' => 1, 'null' => 0, 'unique' => 0, },
-    'expires'   => { 'type' => 'INTEGER', 'key' => 1, 'null' => 0, 'unique' => 0, },
+    'app'       => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
+    'user'      => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
+    'extra'     => { 'type' => 'BLOB',    'key' => 0, 'null' => 1, 'unique' => 0, },
 );
 
 $dbh->do( "DROP TABLE IF EXISTS $table" );
@@ -33,16 +36,20 @@ CREATE TABLE $table (
 EOT
 
 foreach my $field ( keys %fields ){
-    $sql .= $field . ' ' . $fields{ $field }->{'type'} . ",\n";
+    #print "=================================================\n";
+    #print "unique: '" . $fields{ $field }->{'unique'} . "'\n";
+    #print "null:   '" . $fields{ $field }->{'null'} . "'\n";
+    #print "=================================================\n";
+    $sql .= $field . ' ' . $fields{ $field }->{'type'};
     if ( $field eq 'lock_id' ){
         ## This is the primary key, needs special handling:
-        ## strip the ',\n'
-        $sql =~ s/,\n$//;
-        ## Add the special stuff and the ',\n'
-        $sql .= " PRIMARY KEY AUTOINCREMENT,\n"
+        $sql .= " UNIQUE PRIMARY KEY AUTOINCREMENT";
     }
+    $sql .= $fields{ $field }->{'unique'} ? '' : ' UNIQUE';
+    $sql .= $fields{ $field }->{'null'}   ? '' : ' NOT NULL';
+    $sql .= ",\n";
 }
-## sqlite fails if there's an extra , ... -------------------------^
+## sqlite fails if there's an extra , at the end ...
 $sql =~ s/,\n$/\n/;
 
 $sql .= ")\n";  ## Add the ')'
@@ -59,28 +66,6 @@ if ( $DBI::err ){
     #print "SQL Successful!\n" if $debug;
 }
 
-=pod
-
-my $sth = $dbh->prepare( $sql );
-print Dumper $dbh if $debug;
-print Dumper $sth if $debug;
-
-$dbh->{'RaiseError'} = 1;
-$sth->{'RaiseError'} = 1;
-
-$sth->execute unless $debug;
-$sth->finish;
-
-print Dumper $sth if $debug;
-
-if ( $dbh->err() ){
-    print "ERROR> ", $dbh->errstr(), "\n";
-} else {
-    print "SQL Successful!\n" if $debug;
-}
-
-=cut
-
 ## DETACH DATABASE $db
 $dbh->disconnect();
 
@@ -92,3 +77,6 @@ product - varchar(100) - not null
 host - varchar(200) - not null
 created - datetime - not null
 expires - datetime - not null - default create + 24 hours?
+user - varchar(100) - not null
+app - varchar(100) - not null
+extra - blob - null ok

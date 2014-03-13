@@ -4,4 +4,17 @@ product - varchar(100) - not null
 host - varchar(200) - not null
 created - datetime - not null
 expires - datetime - not null - default create + 24 hours?
+user - varchar(100) - not null
+app - varchar(100) - not null
+extra - blob - null ok
+
+DSM:
+action: restore
+dataset: 2561
+host: app361.lab1.ariba.com
+product: buyer
+service: dev2
+status: Finished
+user: svcdev2
+
 
