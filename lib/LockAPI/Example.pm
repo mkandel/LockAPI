@@ -7,7 +7,7 @@ sub welcome {
 
     # Render template "example/welcome.html.ep" with message
     $self->render(
-        msg => 'Welcome to the Mojolicious real-time web framework MotherFucker!!!!' );
+        msg => 'Hey, welcome to the Mojolicious real-time web framework MotherFucker!!!!' );
 }
 
 1;

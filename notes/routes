@@ -1,12 +1,29 @@
-/add/:service/:product/:host
-/add/:service/:product/:host/:expires
+/add/:service/:product/:host/:user/:app/:?extra
+/add/:service/:product/:host/:user/:app/:expires/:?extra
 
 /delete/:lockId
-/delete/:service/:product/:host
-/delete/:service/:product/:host/:expires
+/delete/:service/:product/:host/:user/:app
 
 /check/:lockId
-/check/:service/:product/:host
+/check/:service/:product/:host/:user/:app
 
 /list/
-/add/:service/:product/:host
+/list/:service/:product/:host/:user/:app
+## Maybe ...
+/list/filter/:filter
+
+/modify/:lockId/:expires/:user/:app/:?extra
+
+---------------------------------------------
+Key:
+:          - variabe
+:?         - optional variable
+
+Glossary:
+service    - logical environment (dev3/load3)
+product    - product being worked on (buyer/s4/auc)
+host       - host being locked
+user       - user requesting the lock
+app        - application requesting the lock.  could possibly be the same as 'product' but not in the case of Ops Tools
+extra      - optional hash of metadata relating to the lock
+expires    - time lock expires.  if no time given, default to some # of hours from 'add' time

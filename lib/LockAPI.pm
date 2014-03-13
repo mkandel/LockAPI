@@ -7,6 +7,9 @@ our $VERSION = '0.01';
 sub startup {
     my $self = shift;
 
+    ## Shutup supid secret warning ...
+    $self->secret('My very secret passphrase.');
+
     # Documentation browser under "/perldoc"
     $self->plugin('PODRenderer');
 
