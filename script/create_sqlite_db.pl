@@ -7,7 +7,9 @@ use DBI;
 use Getopt::Long;
 Getopt::Long::Configure qw/bundling no_ignore_case/;
 
-my $debug = 0;
+my $debug  = 0;
+my $dryrun = 0;
+
 my $db    = 'data/LockDB.sqlite';
 my $dbh   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or die $DBI::errstr;
 my $table = 'locks';
@@ -15,6 +17,7 @@ my $full  = "$db\.$table";
 
 GetOptions(
     "debug|d"        => \$debug,
+    "dryrun|n"       => \$dryrun,
 );
 
 my $fields = {
@@ -52,10 +55,9 @@ $sql =~ s/,\n$/\n/;
 
 $sql .= ")\n";  ## Add the ')'
 
-print "Running SQL:\n$sql\n" if $debug;
-#$sql =~ s/\n//g;
+print "Running SQL:\n$sql" if $debug;
 
-$dbh->do( $sql ) unless $debug;
+$dbh->do( $sql ) unless $dryrun;
 
 if ( $DBI::err ){
     print "ERROR> ", $DBI::errstr, "\n";

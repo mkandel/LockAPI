@@ -8,7 +8,10 @@ sub startup {
     my $self = shift;
 
     ## Shutup supid secret warning ...
-    $self->secret('My very secret motherfucking passphrase.');
+    ## Old style, pre-5.18?
+    #$self->secret('My very secret motherfucking passphrase.');
+    ## New style ...
+    $self->secrets(['My very secret motherfucking passphrase.']);
 
     # Documentation browser under "/perldoc"
     $self->plugin('PODRenderer');
@@ -19,25 +22,21 @@ sub startup {
     # Normal route to controller
     $r->get('/')->to('example#welcome');
 
-#    my $root = $r->under('/');
-    #$root->post('/list')->to('blog#list');
-#    $root->get(sub { shift->render(text => 'Go away!') });
-
     ## API v1 routes
     ## Add
-    $r->get('/v1/add/'   )->to( controller => 'LockAPI::Action::List', action => 'list' );
+    $r->get('/v1/add/'   )->to( 'action-add#add' );
 
     ## Delete
-    $r->get('/v1/delete/')->to('action::Delete#delete');
+    $r->get('/v1/delete/')->to('action-delete#delete');
 
     ## List
-    $r->get('/v1/list/'  )->to('action::List#list'    );
+    $r->get('/v1/list/'  )->to('action-list#list'    );
     
     ## Check
-    $r->get('/v1/check/' )->to('action::Check#check'  );
+    $r->get('/v1/check/' )->to('action-check#check'  );
 
     ## Modify
-    $r->get('/v1/modify/')->to('action::Modify#modify');
+    $r->get('/v1/modify/')->to('action-modify#modify');
 
     ## Default
 #    $r->get('/v1/'       )->render(text => 'Available actions: add delete list check modify');
@@ -62,7 +61,7 @@ LockAPI is
 
 =head1 AUTHOR
 
-Marc Kandel E<lt>mkandel@ariba.comE<gt>
+Marc Kandel E<lt>marc.kandel.cpan@gmail.comE<gt>
 
 =head1 COPYRIGHT
 

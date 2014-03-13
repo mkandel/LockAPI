@@ -12,7 +12,7 @@ LockAPI is
 
 # AUTHOR
 
-Marc Kandel <mkandel@ariba.com>
+Marc Kandel <marc.kandel.cpan@gmail.com>
 
 # COPYRIGHT
 
