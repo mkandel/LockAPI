@@ -13,6 +13,12 @@ use Pod::Usage;
 
 use POSIX qw{ getlogin };
 use JSON;
+use LWP::UserAgent;
+
+use FindBin;
+use lib "$FindBin::Bin/../lib/";
+use LockAPI::Config;
+use LockAPI::Constants;
 
 use Time::HiRes qw{ gettimeofday };
 my $start = gettimeofday;
@@ -25,10 +31,19 @@ local $| = 1;
 my $debug  = 0;
 my $dryrun = 0;
 
+my $conf = LockAPI::Config->new();
+#my $conf = LockAPI::Config->new({ 'debug' => 1 });
+#print Dumper $conf;
+#print "API   : " , $conf->api_version() , "\n";
+#print "server: " , $conf->server() , "\n";
+#print "port  : " , $conf->port() , "\n";
+#exit;
+
 my $user = getlogin;
 my ( $product, $service, $host, $app, $expires, $extra_JSON );
-my $lock_srv = 'localhost';
-my $srv_port = 3000;
+my $lock_srv = $conf->server()    ||  'localhost';
+my $srv_port = $conf->port()      || 3000;
+my $api_vers = $conf->api_version || 'v1';
 
 my @actions = qw{ add delete list check modify };
 
@@ -64,7 +79,8 @@ pod2usage( -verbose => 1, -message => "Missing argument 'app'!!"     ) unless $a
 $expires = $expires || time;
 $extra_JSON = $extra_JSON || '';
 
-my $url = "http://$lock_srv/v1/$action/$service/$product/$host/$user/$app/$extra_JSON";
+my $method = $LockAPI::Constants::method_for{ $action };
+my $url = "http://$lock_srv/$api_vers/$action/$service/$product/$host/$user/$app/$extra_JSON";
 
 if ( $debug ){
     print "Action : '$action'\n";
@@ -74,10 +90,16 @@ if ( $debug ){
     print "App    : '$app'\n";
     print "Expires: '$expires'\n";
     print "URL    : '$url'\n";
+    print "Meth: '$method'\n";
     print "\n";
 }
 
+my $ua = LWP::UserAgent->new();
+$ua->timeout( 30 );
 
+
+my $resp = $ua->$method( $url );
+print Dumper $resp;
 
 #########################################################################################
 END{

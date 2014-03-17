@@ -46,11 +46,9 @@ if ( $user ){
 }
 
 my $conf = {
-    'config'      => {  
-        'server'      => 'localhost',
-        'port'        => '3000',
-        'api_version' => 'v1',
-    }
+    'server'      => 'localhost',
+    'port'        => '3000',
+    'api_version' => 'v1',
 };
 
 my $out = Dump( $conf );
