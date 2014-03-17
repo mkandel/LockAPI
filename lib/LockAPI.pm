@@ -1,5 +1,6 @@
 package LockAPI;
 use Mojo::Base 'Mojolicious';
+use Carp;
 
 our $VERSION = '0.01';
 

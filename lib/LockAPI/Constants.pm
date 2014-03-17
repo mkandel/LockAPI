@@ -1,5 +1,6 @@
 package LockAPI::Constants;
 use Mojo::Base 'Mojolicious::Controller';
+use Carp;
 
 my %method_for = (
     'add'     => 'PUT',

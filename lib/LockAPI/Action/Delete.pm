@@ -1,5 +1,6 @@
 package LockAPI::Action::Delete;
 use Mojo::Base 'Mojolicious::Controller';
+use Carp;
 
 sub delete {
     my $self = shift;

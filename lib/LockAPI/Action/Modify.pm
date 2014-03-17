@@ -1,5 +1,6 @@
 package LockAPI::Action::Modify;
 use Mojo::Base 'Mojolicious::Controller';
+use Carp;
 
 sub add {
     my $self = shift;
