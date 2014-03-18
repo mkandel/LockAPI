@@ -1,6 +1,7 @@
 package LockAPI;
 use Mojo::Base 'Mojolicious';
 use Carp;
+use Data::Dumper;
 
 use lib "$FindBin::Bin/../lib/";
 use LockAPI::Config;
@@ -18,7 +19,7 @@ sub startup {
     ## Old style, pre-5.18?
     #$self->secret('My very secret motherfucking passphrase.');
     ## New style ...
-    $self->secrets(['My very secret motherfucking passphrase.']);
+#    $self->secrets(['My very secret motherfucking passphrase.']);
 
     # Router
     my $r = $self->routes;
@@ -88,12 +89,7 @@ Marc Kandel E<lt>marc.kandel.cpan@gmail.comE<gt>
 
 Copyright 2014- Marc Kandel
 
-=head1 LICENSE
-
-This code is released as Apathyware:
-
-"The code doesn't care what you do with it, and neither do I."
-
 =head1 SEE ALSO
 
 =cut
+

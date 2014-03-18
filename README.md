@@ -18,9 +18,4 @@ Marc Kandel <marc.kandel.cpan@gmail.com>
 
 Copyright 2014- Marc Kandel
 
-# LICENSE
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
-
 # SEE ALSO

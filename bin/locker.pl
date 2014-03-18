@@ -189,12 +189,6 @@ C<locker.pl> commandline client for LockAPI
 
 Marc Kandel C<< <marc.kandel.cpan at gmail.com> >>
 
-=head1 LICENSE
-
-This code is released as Apathyware:
-
-"The code doesn't care what you do with it, and neither do I."
-
 =cut
 
 __END__
