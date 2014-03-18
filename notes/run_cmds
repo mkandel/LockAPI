@@ -1,0 +1,6 @@
+./bin/locker.pl add -s service -p product -o some.host.nam -u user -a something.pl -x '{"three":3,"six":6,"five":5,"seven":7,"two":2,"one":1,"zero":0,"nine":9,"eight":8,"four":4}' -d
+
+./bin/locker.pl add -s service -p product -o some.host.nam -u user -a something.pl -d
+
+./bin/locker.pl list -s service -p product -o some.host.nam -u user -a something.pl -d
+

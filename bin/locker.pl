@@ -55,7 +55,7 @@ GetOptions(
     "extra|x=s"      => \$extra_JSON,
     "server|r=s"     => \$lock_srv,
     "port|t=i"       => \$srv_port,
-);
+) || pod2usage( 1 );
 
 $lock_srv .= $srv_port ? ":$srv_port" : '';
 
@@ -71,7 +71,12 @@ pod2usage( -verbose => 1, -message => "Missing argument 'product'!!" ) unless $p
 pod2usage( -verbose => 1, -message => "Missing argument 'service'!!" ) unless $service;
 pod2usage( -verbose => 1, -message => "Missing argument 'host'!!"    ) unless $host;
 pod2usage( -verbose => 1, -message => "Missing argument 'app'!!"     ) unless $app;
-$expires = $expires || time;
+
+if ( ( $action eq 'list' || $action eq 'check' ) && $extra_JSON ){
+    pod2usage( -verbose => 1, -message => "Cannot use extra JSON with action '$action'" );
+}
+
+$expires = $expires || time + ( 60 * 60 * 24 );
 $extra_JSON = $extra_JSON || '';
 
 my $method = $LockAPI::Constants::method_for{ $action };
@@ -86,15 +91,23 @@ if ( $debug ){
     print "Expires: '$expires'\n";
     print "URL    : '$url'\n";
     print "Meth   : '$method'\n";
+    print "Extra  : '$extra_JSON'\n" if $extra_JSON;
     print "\n";
 }
 
 my $ua = LWP::UserAgent->new();
 $ua->timeout( 30 );
 
-
 my $resp = $ua->$method( $url );
-print Dumper $resp;
+if ( $debug ){
+    #print Dumper $resp;
+    my $out = $resp->content();
+    $out =~ s/&nbsp;/ /g;
+    $out =~ s/<BR>/\n/gi;
+    
+    print "Method used: ", $resp->request()->method(), "\n";
+    print "Content:\n$out\n";
+}
 
 #########################################################################################
 END{
