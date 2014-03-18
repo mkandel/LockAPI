@@ -41,7 +41,7 @@ if ( $server_n eq 'morbo' || $server_n eq 'm' ){
     pod2usage( -message => "Invalid server '$server_n'", -exitval => 2 );
 }
 
-my $cmd = "$server --listen http://*:$srv_port --verbose $FindBin::Bin/../script/lock_api";
+my $cmd = "$server --listen http://*:$srv_port --verbose $FindBin::Bin/../script/lock_api -w $FindBin::Bin/../script -w $FindBin::Bin/../lib";
 print "Running '$cmd':\n";
 
 return system $cmd;

@@ -5,6 +5,7 @@ use Data::Dumper;
 
 use lib "$FindBin::Bin/../lib/";
 use LockAPI::Config;
+use LockAPI::DB::Sqlite;
 
 our $VERSION = '0.01';
 
@@ -15,11 +16,16 @@ sub startup {
     my $conf = LockAPI::Config->new();
     my $api_vers = $conf->api_version() || 'v1';
 
+    ## We can change the DB type by changing this logic to config based:
+    my $db = LockAPI::DB::Sqlite->new();
+
+    $self->stash( 'db' => $db );
+
     ## Shutup supid secret warning ...
     ## Old style, pre-5.18?
     #$self->secret('My very secret motherfucking passphrase.');
     ## New style ...
-#    $self->secrets(['My very secret motherfucking passphrase.']);
+    $self->secrets(['My very secret motherfucking passphrase.']);
 
     # Router
     my $r = $self->routes;
