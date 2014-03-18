@@ -5,7 +5,7 @@ use Carp;
 sub delete {
     my $self = shift;
 
-    $self->render(text => 'Hi from LockAPI::Action::Delete::delete()!!');
+    $self->render( text => 'Hi from LockAPI::Action::Delete::delete()!!' );
 }
 
 1;

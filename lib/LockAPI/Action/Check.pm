@@ -5,7 +5,7 @@ use Carp;
 sub check {
     my $self = shift;
 
-    $self->render(text => 'Hi from LockAPI::Action::Check::check()!!');
+    $self->render( text => 'Hi from LockAPI::Action::Check::check()!!' );
 }
 
 1;

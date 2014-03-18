@@ -30,14 +30,16 @@ sub startup {
     ## API v1 routes
     ## PUT
     foreach my $action ( qw{ add delete modify } ){
-        $r->put("/$api_vers/$action/:service/:product/#host/:user/#app/"  )->to("action-$action#$action" );
+        ## These need to be PUT but for testing in a browser ... need to use ANY ...
+        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller/*extra"  )->to("action-$action#$action" );
+        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller/*extra"  )->to("action-$action#$action" );
+        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
+        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
     }
 
     ## GET
     foreach my $action ( qw{ list check } ){
-#                 $r->get('/v1/list/:service/:product/#host/:user/#app')->to(
-        $r->get("/$api_vers/$action/:service/:product/#host/:user/#app"   )->to( "action-list#list" );
-        #$r->get("/$api_vers/$action/:service/:product/#host/:user/#app"   )->to( "action-$action#$action" );
+        $r->get("/$api_vers/$action/:service/:product/#host/:user/#caller"   )->to( "action-$action#$action" );
     }
 
 
