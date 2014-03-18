@@ -41,7 +41,7 @@ my $conf = LockAPI::Config->new();
 
 my $user = getlogin;
 my ( $product, $service, $host, $app, $expires, $extra_JSON );
-my $lock_srv = $conf->server()    ||  'localhost';
+my $lock_srv = $conf->server()    || 'localhost';
 my $srv_port = $conf->port()      || 3000;
 my $api_vers = $conf->api_version || 'v1';
 
@@ -90,7 +90,7 @@ if ( $debug ){
     print "App    : '$app'\n";
     print "Expires: '$expires'\n";
     print "URL    : '$url'\n";
-    print "Meth: '$method'\n";
+    print "Meth   : '$method'\n";
     print "\n";
 }
 
@@ -99,7 +99,7 @@ $ua->timeout( 30 );
 
 
 my $resp = $ua->$method( $url );
-print Dumper $resp;
+#print Dumper $resp;
 
 #########################################################################################
 END{

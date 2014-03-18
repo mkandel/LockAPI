@@ -20,14 +20,11 @@ sub startup {
     ## New style ...
     $self->secrets(['My very secret motherfucking passphrase.']);
 
-    # Documentation browser under "/perldoc"
-    $self->plugin('PODRenderer');
-
     # Router
     my $r = $self->routes;
 
     # Normal route to controller
-    $r->get('/')->to('example#welcome');
+    #$r->get('/')->to('example#welcome');
 
     ## API v1 routes
     ## PUT
@@ -37,7 +34,9 @@ sub startup {
 
     ## GET
     foreach my $action ( qw{ list check } ){
-        $r->get("/$api_vers/$action/:service/:product/#host/:user/#app/"   )->to( "action-$action#$action" );
+#                 $r->get('/v1/list/:service/:product/#host/:user/#app')->to(
+        $r->get("/$api_vers/$action/:service/:product/#host/:user/#app"   )->to( "action-list#list" );
+        #$r->get("/$api_vers/$action/:service/:product/#host/:user/#app"   )->to( "action-$action#$action" );
     }
 
 

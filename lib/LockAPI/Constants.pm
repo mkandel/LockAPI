@@ -1,5 +1,4 @@
 package LockAPI::Constants;
-use Mojo::Base 'Mojolicious::Controller';
 use Carp;
 
 our %method_for = (
