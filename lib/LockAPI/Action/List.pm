@@ -2,7 +2,7 @@ package LockAPI::Action::List;
 use Mojo::Base 'Mojolicious::Controller';
 use Carp;
 
-sub add {
+sub list {
     my $self = shift;
 
     # Render template "example/welcome.html.ep" with message

@@ -2,11 +2,17 @@ package LockAPI;
 use Mojo::Base 'Mojolicious';
 use Carp;
 
+use lib "$FindBin::Bin/../lib/";
+use LockAPI::Config;
+
 our $VERSION = '0.01';
 
 # This method will run once at server start
 sub startup {
     my $self = shift;
+
+    my $conf = LockAPI::Config->new();
+    my $api_vers = $conf->api_version() || 'v1';
 
     ## Shutup supid secret warning ...
     ## Old style, pre-5.18?
@@ -24,23 +30,38 @@ sub startup {
     $r->get('/')->to('example#welcome');
 
     ## API v1 routes
-    ## Add
-    $r->put('/v1/add/'   )->to( 'action-add#add' );
+    ## PUT
+    foreach my $action ( qw{ add delete modify } ){
+        $r->put("/$api_vers/$action/:service/:product/#host/:user/#app/"  )->to("action-$action#$action" );
+    }
+
+    ## GET
+    foreach my $action ( qw{ list check } ){
+        $r->get("/$api_vers/$action/:service/:product/#host/:user/#app/"   )->to( "action-$action#$action" );
+    }
+
+
+#    $r->put("/$api_vers/add/"   )->to( 'action-add#add' );
 
     ## Delete
-    $r->put('/v1/delete/')->to('action-delete#delete');
+#    $r->put("/$api_vers/delete/")->to('action-delete#delete');
 
     ## List
-    $r->get('/v1/list/'  )->to('action-list#list'    );
+#    $r->get("/$api_vers/list/"  )->to('action-list#list'    );
     
     ## Check
-    $r->get('/v1/check/' )->to('action-check#check'  );
+#    $r->get("/$api_vers/check/" )->to('action-check#check'  );
 
     ## Modify
-    $r->put('/v1/modify/')->to('action-modify#modify');
+#    $r->put("/$api_vers/modify/")->to('action-modify#modify');
 
     ## Default
-#    $r->get('/v1/'       )->render(text => 'Available actions: add delete list check modify');
+    $r->get('/v1/' )->to(
+        cb  => sub {
+            my $self = shift;
+            $self->render( text => 'Available actions:<BR> GET:<BR> list check<BR> PUT:<BR> add delete modify');
+        }
+    );
 }
 
 1;
