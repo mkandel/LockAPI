@@ -71,6 +71,7 @@ pod2usage( -verbose => 1, -message => "Missing argument 'product'!!" ) unless $p
 pod2usage( -verbose => 1, -message => "Missing argument 'service'!!" ) unless $service;
 pod2usage( -verbose => 1, -message => "Missing argument 'host'!!"    ) unless $host;
 pod2usage( -verbose => 1, -message => "Missing argument 'app'!!"     ) unless $app;
+#pod2usage( -verbose => 1, -message => "Missing argument 'expires'!!" ) unless $expires;
 
 if ( ( $action eq 'list' || $action eq 'check' ) && $extra_JSON ){
     pod2usage( -verbose => 1, -message => "Cannot use extra JSON with action '$action'" );
@@ -80,7 +81,7 @@ $expires = $expires || time + ( 60 * 60 * 24 );
 $extra_JSON = $extra_JSON || '';
 
 my $method = $LockAPI::Constants::method_for{ $action };
-my $url = "http://$lock_srv/$api_vers/$action/$service/$product/$host/$user/$app/$extra_JSON";
+my $url = "http://$lock_srv/$api_vers/$action/$service/$product/$host/$user/$app/$expires/$extra_JSON";
 
 if ( $debug ){
     print "Action : '$action'\n";

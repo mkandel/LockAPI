@@ -30,38 +30,36 @@ sub startup {
     # Router
     my $r = $self->routes;
 
-    # Normal route to controller
-    #$r->get('/')->to('example#welcome');
-
     ## API v1 routes
     ## PUT
+    ## add:
+    $r->any("/$api_vers/add/:service/:product/#host/:user/#caller"  )->to("action-add#add" );
+    #$r->any("/$api_vers/add/:service/:product/#host/:user/#caller/:expires", expires => qr/\d+/ )->to("action-add#add" );
+    $r->any("/$api_vers/add/:service/:product/#host/:user/#caller/:expires" )->to("action-add#add" );
+    $r->any("/$api_vers/add/:service/:product/#host/:user/#caller/:expires/(*extra)" )
+        ->to("action-add#add" );
+    $r->any("/$api_vers/add/:service/:product/#host/:user/#caller/(*extra)" )->to("action-add#add" );
+
+=pod
+
     foreach my $action ( qw{ add delete modify } ){
         ## These need to be PUT but for testing in a browser ... need to use ANY ...
-        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller/*extra"  )->to("action-$action#$action" );
-        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller/*extra"  )->to("action-$action#$action" );
+        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller/(:expires)", expires => qr/\d+/  )->to("action-$action#$action" );
+        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller/(:expires)", expires => qr/\d+/  )->to("action-$action#$action" );
+        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller/(:expires)/(*extra"), expires => qr/\d+/  )->to("action-$action#$action" );
+        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller/(:expires)/(*extra)", expires => qr/\d+/  )->to("action-$action#$action" );
+        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller/(*extra)"  )->to("action-$action#$action" );
+        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller/(*extra)"  )->to("action-$action#$action" );
         #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
         $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
     }
+
+=cut
 
     ## GET
     foreach my $action ( qw{ list check } ){
         $r->get("/$api_vers/$action/:service/:product/#host/:user/#caller"   )->to( "action-$action#$action" );
     }
-
-
-#    $r->put("/$api_vers/add/"   )->to( 'action-add#add' );
-
-    ## Delete
-#    $r->put("/$api_vers/delete/")->to('action-delete#delete');
-
-    ## List
-#    $r->get("/$api_vers/list/"  )->to('action-list#list'    );
-    
-    ## Check
-#    $r->get("/$api_vers/check/" )->to('action-check#check'  );
-
-    ## Modify
-#    $r->put("/$api_vers/modify/")->to('action-modify#modify');
 
     ## Default
     $r->get('/v1/' )->to(

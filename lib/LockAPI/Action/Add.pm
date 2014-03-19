@@ -14,7 +14,7 @@ sub add {
     my $status = 200; ## Assume OK until something borks ...
 
     my $text = '<PRE>';
-    $text .= Dumper $self;
+    $text .= Dumper $self->stash();
     $text .= '</PRE>';
 #    my $db = $self->
 #    my @data = split /\n/, Dump( $self->stash() );
