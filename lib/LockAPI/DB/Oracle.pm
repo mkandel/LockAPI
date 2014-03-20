@@ -27,12 +27,15 @@ sub get {
 
 __END__
 
-    service TEXT NOT NULL,
-    extra BLOB,
-    created INTEGER NOT NULL,
-    user TEXT NOT NULL,
-    expires INTEGER NOT NULL,
-    app TEXT NOT NULL,
+CREATE TABLE locks (
     lock_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+    caller TEXT NOT NULL,
+    user TEXT NOT NULL,
     product TEXT NOT NULL,
-    host TEXT NOT NULL
+    expires INTEGER NOT NULL,
+    extra BLOB,
+    service TEXT NOT NULL,
+    created INTEGER NOT NULL,
+    host TEXT NOT NULL,
+    fingerprint TEXT UNIQUE NOT NULL
+);

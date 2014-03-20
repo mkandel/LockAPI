@@ -23,15 +23,16 @@ GetOptions(
 my $fields = {
     ## Field definitions so we can generate the SQL.
     ## Since I'm a Perl guy and not a DBA this is easier to maintain than raw SQL
-    'lock_id'   => { 'type' => 'INTEGER', 'key' => 1, 'null' => 0, 'unique' => 1, },
-    'created'   => { 'type' => 'INTEGER', 'key' => 0, 'null' => 0, 'unique' => 0, },
-    'expires'   => { 'type' => 'INTEGER', 'key' => 0, 'null' => 0, 'unique' => 0, },
-    'service'   => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
-    'product'   => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
-    'host'      => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
-    'app'       => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
-    'user'      => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
-    'extra'     => { 'type' => 'BLOB',    'key' => 0, 'null' => 1, 'unique' => 0, },
+    'lock_id'     => { 'type' => 'INTEGER', 'key' => 1, 'null' => 0, 'unique' => 1, },
+    'created'     => { 'type' => 'INTEGER', 'key' => 0, 'null' => 0, 'unique' => 0, },
+    'expires'     => { 'type' => 'INTEGER', 'key' => 0, 'null' => 0, 'unique' => 0, },
+    'service'     => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
+    'product'     => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
+    'host'        => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
+    'caller'      => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
+    'user'        => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
+    'fingerprint' => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 1, },
+    'extra'       => { 'type' => 'BLOB',    'key' => 0, 'null' => 1, 'unique' => 0, },
 };
 
 $dbh->do( "DROP TABLE IF EXISTS $table" );

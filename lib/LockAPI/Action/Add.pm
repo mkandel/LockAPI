@@ -2,6 +2,7 @@ package LockAPI::Action::Add;
 use Mojo::Base 'Mojolicious::Controller';
 use Carp;
 use YAML::Syck;
+use URI::Escape;
 use Data::Dumper;
 
 use FindBin;
@@ -11,12 +12,15 @@ use LockAPI::DB::Sqlite;
 sub add {
     my $self = shift;
 
+    my $db = LockAPI::DB::Sqlite->new();
+    my $conf = {};
+
     my $status = 200; ## Assume OK until something borks ...
+    my $stash = $self->stash();
 
     my $text = '<PRE>';
-    $text .= Dumper $self->stash();
+    $text .= Dumper $stash;
     $text .= '</PRE>';
-#    my $db = $self->
 #    my @data = split /\n/, Dump( $self->stash() );
 #    my $out = '';
 #
@@ -26,6 +30,12 @@ sub add {
 #    }
 #
 #    $self->render( text => "<CODE>$out</CODE>" );
+
+    eval{
+        $db->add( $conf );
+    };
+    croak $@ if $@;
+
     $self->render( text => "$text", status => $status );
 }
 

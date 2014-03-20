@@ -23,7 +23,6 @@ $prog =~ s/^.*\///;
 
 ## Code goes here
 use JSON::XS;
-use URL::Encode qw{ url_encode };
 use URI::Escape;
 
 my $data = {
