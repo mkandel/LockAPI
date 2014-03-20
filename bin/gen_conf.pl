@@ -49,6 +49,7 @@ my $conf = {
     'server'      => 'localhost',
     'port'        => '3000',
     'api_version' => 'v1',
+    'db_type'     => 'sqlite',
 };
 
 my $out = Dump( $conf );

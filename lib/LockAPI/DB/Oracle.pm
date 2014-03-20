@@ -1,4 +1,4 @@
-package LockAPI::DB::Sqlite;
+package LockAPI::DB::Oracle;
 use Carp;
 
 sub new {
