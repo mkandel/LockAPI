@@ -23,8 +23,8 @@ $prog =~ s/^.*\///;
 
 ## Code goes here
 use JSON::XS;
-
-use FindBin;
+use URL::Encode qw{ url_encode };
+use URI::Escape;
 
 my $data = {
     'zero'  => 0,
@@ -39,7 +39,9 @@ my $data = {
     'nine'  => 9,
 };
 
-my $out = encode_json $data;
+#my $out = url_encode( encode_json $data );
+my $out = uri_escape( encode_json $data );
+
 print "$out\n";
 
 __END__
