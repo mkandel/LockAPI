@@ -1,5 +1,6 @@
 package LockAPI::DB::Sqlite;
 use Carp;
+use DBD::SQLite;
 
 sub new {
     my $class = shift;
@@ -10,8 +11,21 @@ sub new {
 
 sub add {
     my $self = shift;
+    my $conf = shift || croak "Cannot add entry without data ...\n";
 
-    my $sql = "INSERT INTO locks ( service, product, host, user, caller, created, expires, extra, fingerprint ) VALUES ( '$service', '$product', '$host', '$user', '$caller', $create, $expire, $extra, '$service_$product_$host' );"
+    my $db = LockAPI::DB::Sqlite->new();
+    my $fprint = "$self->{'service'}_$self->{'product'}_$self->{'host'}";
+
+    my $sql = "INSERT INTO locks ( service, product, host, user, caller, created, expires, extra, fingerprint ) VALUES ( $self->{'service'}, $self->{'product'}, $self->{'host'}, $self->{'user'}, $self->{'caller'}, $self->{'create'}, $self->{'expire'}, $self->{'extra'}, '$fprint' );";
+
+    if ( $self->{'debug'} ){
+        print "Will run '$sql'\n";
+    }
+
+    eval{
+        $dbh->do( $sql ) unless $conf->{'dryrun'};
+    };
+    croak $@ if $@;
 }
 
 sub list {

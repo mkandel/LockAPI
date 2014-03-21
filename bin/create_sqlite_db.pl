@@ -13,7 +13,6 @@ my $dryrun = 0;
 my $db    = 'data/LockDB.sqlite';
 my $dbh   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or die $DBI::errstr;
 my $table = 'locks';
-my $full  = "$db\.$table";
 
 GetOptions(
     "debug|d"        => \$debug,
