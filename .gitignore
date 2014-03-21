@@ -11,4 +11,5 @@ data/*
 script/test_sqlite.pl
 *.sw*
 out.*
+out
 LICENSE

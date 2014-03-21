@@ -17,18 +17,17 @@ sub add {
     my $log = Mojo::Log->new();
 
     my $db    = 'data/LockDB.sqlite';
-    my $dbh   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or die $DBI::errstr;
+    my $dbh   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or croak $DBI::errstr;
     my $table = 'locks';
 
     my $ret;
 
     my $fprint = "$conf->{'service'}_$conf->{'product'}_$conf->{'host'}";
 
-    my $sql = "INSERT INTO locks ( service, product, host, user, caller, created, expires, extra, fingerprint ) VALUES ( $conf->{'service'}, $conf->{'product'}, $conf->{'host'}, $conf->{'user'}, $conf->{'caller'}, $conf->{'created'}, $conf->{'expires'}, $conf->{'extra'}, '$fprint' );";
+    my $sql = "INSERT INTO locks ( service, product, host, user, caller, created, expires, extra, fingerprint ) VALUES ( '$conf->{'service'}', '$conf->{'product'}', '$conf->{'host'}', '$conf->{'user'}', '$conf->{'caller'}', $conf->{'created'}, $conf->{'expires'}, '$conf->{'extra'}', '$fprint' );";
 
     if ( $conf->{'debug'} ){
         $log->debug( "Will run '$sql'" );
-        $ret = "Will run '$sql'\n";
     }
 
     eval{
@@ -36,7 +35,13 @@ sub add {
     };
     croak $@ if $@;
 
-    return $ret;
+    $sql = "SELECT lock_id FROM locks WHERE fingerprint = '$fprint';";
+    eval{
+        $ret = $dbh->do( $sql ) unless $conf->{'dryrun'};
+    };
+    croak $@ if $@;
+
+    return $ret || croak __PACKAGE__, '::add(): Unrecoverable error ...';
 }
 
 sub list {

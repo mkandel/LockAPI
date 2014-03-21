@@ -18,7 +18,7 @@ sub add {
 
     my $conf = {
         'debug'      => 1,
-        'dryrun'     => 1,
+#        'dryrun'     => 1,
     };
 
     my $status = 200; ## Assume OK until something borks ...
@@ -45,7 +45,13 @@ sub add {
     eval{
         $ret = $db->add( $conf, $self->app->log );
     };
-    croak $@ if $@;
+    if ( $@ ){
+        if ( $@ =~ m/UNIQUE constraint failed/ ){
+            $text .= "<HR>UNIQUE constraint failed";
+        } else {
+            croak $@;
+        }
+    }
 
     if ( $ret ){
         $text .= "<HR>$ret<BR>";
