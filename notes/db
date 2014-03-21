@@ -2,8 +2,8 @@ lockId - integer - autoincrement - unique - non null - primary key
 service - varchar(100) - not null
 product - varchar(100) - not null
 host - varchar(200) - not null
-created - datetime - not null
-expires - datetime - not null - default create + 24 hours?
+created - epoch_time - not null
+expires - epoch_time - not null - default create + 24 hours?
 user - varchar(100) - not null
 app - varchar(100) - not null
 extra - blob

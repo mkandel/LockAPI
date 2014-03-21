@@ -12,20 +12,31 @@ sub new {
 sub add {
     my $self = shift;
     my $conf = shift || croak "Cannot add entry without data ...\n";
+    #my $log = shift || croak "__PACKAGE__::add - Missing argument?!?\n";
+    #my $log = shift;
+    my $log = Mojo::Log->new();
 
-    my $db = LockAPI::DB::Sqlite->new();
-    my $fprint = "$self->{'service'}_$self->{'product'}_$self->{'host'}";
+    my $db    = 'data/LockDB.sqlite';
+    my $dbh   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or die $DBI::errstr;
+    my $table = 'locks';
 
-    my $sql = "INSERT INTO locks ( service, product, host, user, caller, created, expires, extra, fingerprint ) VALUES ( $self->{'service'}, $self->{'product'}, $self->{'host'}, $self->{'user'}, $self->{'caller'}, $self->{'create'}, $self->{'expire'}, $self->{'extra'}, '$fprint' );";
+    my $ret;
 
-    if ( $self->{'debug'} ){
-        print "Will run '$sql'\n";
+    my $fprint = "$conf->{'service'}_$conf->{'product'}_$conf->{'host'}";
+
+    my $sql = "INSERT INTO locks ( service, product, host, user, caller, created, expires, extra, fingerprint ) VALUES ( $conf->{'service'}, $conf->{'product'}, $conf->{'host'}, $conf->{'user'}, $conf->{'caller'}, $conf->{'created'}, $conf->{'expires'}, $conf->{'extra'}, '$fprint' );";
+
+    if ( $conf->{'debug'} ){
+        $log->debug( "Will run '$sql'" );
+        $ret = "Will run '$sql'\n";
     }
 
     eval{
         $dbh->do( $sql ) unless $conf->{'dryrun'};
     };
     croak $@ if $@;
+
+    return $ret;
 }
 
 sub list {

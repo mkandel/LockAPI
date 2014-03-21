@@ -12,12 +12,14 @@ use LockAPI::DB::Sqlite;
 sub add {
     my $self = shift;
 
-#    my $db = LockAPI::DB::Sqlite->new();
-    my $db    = 'data/LockDB.sqlite';
-    my $dbh   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or die $DBI::errstr;
-    my $table = 'locks';
+    my $created = time;
 
-    my $conf = {};
+    my $db = LockAPI::DB::Sqlite->new();
+
+    my $conf = {
+        'debug'      => 1,
+        'dryrun'     => 1,
+    };
 
     my $status = 200; ## Assume OK until something borks ...
     my $stash = $self->stash();
@@ -25,20 +27,31 @@ sub add {
     my $text = '<PRE>';
     $text .= Dumper $stash;
     $text .= '</PRE>';
-#    my @data = split /\n/, Dump( $self->stash() );
-#    my $out = '';
-#
-#    foreach my $line ( @data ){
-#        $line =~ s/^(\w+)/&nbsp;&nbsp;&nbsp;&nbsp;$1/g;
-#        $out .= $line . '<BR>';
-#    }
-#
-#    $self->render( text => "<CODE>$out</CODE>" );
+
+    $conf->{'service'} = $stash->{'service'};
+    $conf->{'product'} = $stash->{'product'};
+    $conf->{'host'   } = $stash->{'host'};
+    $conf->{'user'   } = $stash->{'user'};
+    $conf->{'caller' } = $stash->{'caller'};
+    $conf->{'extra'  } = $stash->{'extra'};
+    $conf->{'created'} = $created;
+    $conf->{'expires'} = $stash->{'expires'};# || 
+    if ( $conf->{'expires'} < 1 ){ ## zero or -1 indicate default expiration ...
+        $conf->{'expires'} = $created + ( 60 * 60 * 24 ); ## default to 24 hours after created time
+    }
+
+    my $ret;
 
     eval{
-        $db->add( $conf );
+        $ret = $db->add( $conf, $self->app->log );
     };
     croak $@ if $@;
+
+    if ( $ret ){
+        $text .= "<HR>$ret<BR>";
+    }
+
+#    $self->app->log->debug("$text");
 
     $self->render( text => "$text", status => $status );
 }
@@ -55,8 +68,8 @@ my $sql = "
         $self->{'host'},
         $self->{'user'},
         $self->{'caller'},
-        $self->{'create'},
-        $self->{'expire'},
+        $self->{'created'},
+        $self->{'expires'},
         $self->{'extra'},
         "$self->{'service'}_$self->{'product'}_$self->{'host'}"
     );";
