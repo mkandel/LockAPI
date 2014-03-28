@@ -23,7 +23,7 @@ sub startup {
 
     ## Shutup supid secret warning ...
     ## Old style, pre-5.18?
-    #$self->secret('My very secret motherfucking passphrase.');
+    $self->secret('My very secret motherfucking passphrase.');
     ## New style ...
     $self->secrets(['My very secret motherfucking passphrase.']);
 
@@ -34,7 +34,6 @@ sub startup {
     ## PUT
     ## add:
     $r->any("/$api_vers/add/:service/:product/#host/:user/#caller"  )->to("action-add#add" );
-    #$r->any("/$api_vers/add/:service/:product/#host/:user/#caller/:expires", expires => qr/\d+/ )->to("action-add#add" );
     $r->any("/$api_vers/add/:service/:product/#host/:user/#caller/:expires" )->to("action-add#add" );
     $r->any("/$api_vers/add/:service/:product/#host/:user/#caller/:expires/(*extra)" )
         ->to("action-add#add" );

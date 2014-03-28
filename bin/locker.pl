@@ -107,7 +107,8 @@ if ( $debug ){
     $out =~ s/<BR>/\n/gi;
     
     print "Method used: ", $resp->request()->method(), "\n";
-    print "Content:\n$out\n";
+    print "Return code: ", $resp->code(), "\n";
+    print "Content    :\n$out\n";
 }
 
 #########################################################################################

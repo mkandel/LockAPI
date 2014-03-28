@@ -21,12 +21,9 @@ sub add {
 #        'dryrun'     => 1,
     };
 
+    my $ret->{'status'} = 200;
     my $status = 200; ## Assume OK until something borks ...
     my $stash = $self->stash();
-
-    my $text = '<PRE>';
-    $text .= Dumper $stash;
-    $text .= '</PRE>';
 
     $conf->{'service'} = $stash->{'service'};
     $conf->{'product'} = $stash->{'product'};
@@ -35,31 +32,43 @@ sub add {
     $conf->{'caller' } = $stash->{'caller'};
     $conf->{'extra'  } = $stash->{'extra'};
     $conf->{'created'} = $created;
-    $conf->{'expires'} = $stash->{'expires'};# || 
-    if ( $conf->{'expires'} < 1 ){ ## zero or -1 indicate default expiration ...
+    $conf->{'expires'} = $stash->{'expires'};
+    if (  ! defined $conf->{'expires'} || $conf->{'expires'} < 1 ){ ## zero or -1 indicate default expiration ...
         $conf->{'expires'} = $created + ( 60 * 60 * 24 ); ## default to 24 hours after created time
     }
 
-    my $ret;
 
     eval{
         $ret = $db->add( $conf, $self->app->log );
     };
+
+    my $text;
+
     if ( $@ ){
         if ( $@ =~ m/UNIQUE constraint failed/ ){
-            $text .= "<HR>UNIQUE constraint failed";
+            $text .= "UNIQUE constraint failed\n";
         } else {
+            $text .= "Unknown DB Error encountered:\n<BR>\n";
             croak $@;
         }
     }
 
-    if ( $ret ){
-        $text .= "<HR>$ret<BR>";
+    $self->stash->{'lock_id'} = $ret->{'lock_id'};
+
+    $text = "\n<HR><PRE>\n";
+    $text .= Dumper $stash;
+    $text .= "\n</PRE>\n";
+
+
+    if ( $ret && defined $self->{'debug'} ){
+        $text .= "<HR>\n";
+        $text .= Dumper $ret;
+        $text .= '<BR>';
     }
 
 #    $self->app->log->debug("$text");
 
-    $self->render( text => "$text", status => $status );
+    $self->render( text => "$text", status => $ret->{'status'} );
 }
 
 1;

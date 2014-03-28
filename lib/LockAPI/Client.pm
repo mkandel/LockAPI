@@ -38,5 +38,19 @@ sub load_config {
      return $conf;
 }
 
+sub add {
+}
+
+sub list {
+}
+
+sub delete {
+}
+
+sub modify {
+}
+
+sub get {
+}
 
 1;
