@@ -100,6 +100,7 @@ my $ua = LWP::UserAgent->new();
 $ua->timeout( 30 );
 
 my $resp = $ua->$method( $url );
+print Dumper $resp;
 if ( $debug ){
     #print Dumper $resp;
     my $out = $resp->content();
@@ -108,6 +109,7 @@ if ( $debug ){
     
     print "Method used: ", $resp->request()->method(), "\n";
     print "Return code: ", $resp->code(), "\n";
+    print "Lock ID    : ", $resp->content()->{'lock_id'}, "\n";
     print "Content    :\n$out\n";
 }
 

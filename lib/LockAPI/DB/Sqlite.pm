@@ -8,7 +8,11 @@ sub new {
     my $class = shift;
     my $self = {};
 
-    my $self->{'log'} = Mojo::Log->new();
+    my $db    = 'data/LockDB.sqlite';
+    my $self->{'dbh'}   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or croak $DBI::errstr;
+    $self->{'table'} = 'locks';
+
+    $self->{'log'} = Mojo::Log->new();
 
     return bless $self, $class;
 }
@@ -17,74 +21,89 @@ sub add {
     my $self = shift;
     my $conf = shift || croak "Cannot add entry without data ...\n";
 
-    my $db    = 'data/LockDB.sqlite';
-    my $dbh   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or croak $DBI::errstr;
-    my $table = 'locks';
-    ## We'll be handling errors in Perl ...
-#    $dbh->{'RaiseError'} = 0;
-#    $dbh->{'PrintError'} = 0;
-
     my $ret->{'lock_id'} = -1;
     $ret->{'status'} = 200;
 
     my $fprint = "$conf->{'service'}_$conf->{'product'}_$conf->{'host'}";
 
-    my $sql = "INSERT INTO locks ( service, product, host, user, caller, created, expires, extra, fingerprint ) VALUES ( '$conf->{'service'}', '$conf->{'product'}', '$conf->{'host'}', '$conf->{'user'}', '$conf->{'caller'}', $conf->{'created'}, $conf->{'expires'}, '$conf->{'extra'}', '$fprint' );";
+    my $sql = "INSERT INTO $self->{'table'} ( service, product, host, user, caller, created, expires, extra, fingerprint ) VALUES ( '$conf->{'service'}', '$conf->{'product'}', '$conf->{'host'}', '$conf->{'user'}', '$conf->{'caller'}', $conf->{'created'}, $conf->{'expires'}, '$conf->{'extra'}', '$fprint' );";
 
     if ( $conf->{'debug'} ){
-        $self->{'log'}->debug( "** " . __PACKAGE__ . "::add: Will run '$sql'\n" );
+        $self->{'log'}->debug( "** " . __PACKAGE__ . "::add(): Will run '$sql'\n" );
     }
 
     eval{
         unless ( $conf->{'dryrun'} ){
-            $dbh->do( $sql );
+            $self->{'dbh'}->do( $sql );
         }
     };
     #croak $@ if $@;
     if ( $@ ){
         $self->{'status'} = 598;
         $ret->{'status'} = 598;
+        $ret->{'error'} = DBI::errstr || 'No DBI::errstr returned ...';
         #croak $@;
     }
 
     $sql = "SELECT lock_id FROM locks WHERE fingerprint = '$fprint';";
 
     if ( $conf->{'debug'} ){
-        $self->{'log'}->debug( "** " . __PACKAGE__ . "::add: Will run '$sql'\n" );
+        $self->{'log'}->debug( "** " . __PACKAGE__ . "::add(): Will run '$sql'\n" );
     }
 
     eval{
         unless ( $conf->{'dryrun'} ){
-            $self->{'log'}->debug( "** " . __PACKAGE__ . "::add: Running '$sql'\n" );
-            $ret->{'lock_id'} = $dbh->selectall_arrayref( $sql )->[0]->[0] or croak DBI::errstr;
+            $self->{'log'}->debug( "** " . __PACKAGE__ . "::add(): Running '$sql'\n" );
+            $ret->{'lock_id'} = $self->{'dbh'}->selectall_arrayref( $sql )->[0]->[0] or croak DBI::errstr;
         }
     };
     #croak $@ if $@;
     if ( $@ ){
         $self->{'status'} = 599;
         $ret->{'status'} = 599;
+        $ret->{'error'} = DBI::errstr || 'No DBI::errstr returned ...';
         #croak $@;
     }
 
     if ( defined $conf->{'debug'} ){
         my $out = Dumper $ret;
-        $self->{'log'}->debug( "** " . __PACKAGE__ . "::add: Created lock_id '$ret->{'lock_id'}' **" );
-        $self->{'log'}->debug( "** " . __PACKAGE__ . "::add: Returning: '$out' **" );
+        $self->{'log'}->debug( "** " . __PACKAGE__ . "::add(): Created lock_id '$ret->{'lock_id'}' **" );
+        $self->{'log'}->debug( "** " . __PACKAGE__ . "::add(): Returning: '$out' **" );
     }
 
     return $ret || croak __PACKAGE__, '::add(): Unrecoverable error ...';
 }
 
 sub list {
+    my $self = shift;
+    my $conf = shift || croak "Cannot list entry without data ...\n";
+
+    if ( defined $conf->{'debug'} ){
+        my $out = Dumper $conf;
+        $self->{'log'}->debug( "** " . __PACKAGE__ . "::list(): received: '$out' **" );
+    }
 }
 
 sub delete {
+    my $self = shift;
+    my $conf = shift || croak "Cannot delete entry without data ...\n";
+
 }
 
 sub modify {
+    my $self = shift;
+    my $conf = shift || croak "Cannot modify entry without data ...\n";
+
 }
 
-sub get {
+sub check {
+    my $self = shift;
+    my $conf = shift || croak "Cannot get entry without data ...\n";
+
+    if ( defined $conf->{'debug'} ){
+        my $out = Dumper $conf;
+        $self->{'log'}->debug( "** " . __PACKAGE__ . "::check(): received: '$out' **" );
+    }
 }
 
 1;

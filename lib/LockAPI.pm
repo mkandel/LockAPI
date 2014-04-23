@@ -23,7 +23,7 @@ sub startup {
 
     ## Shutup supid secret warning ...
     ## Old style, pre-5.18?
-    $self->secret('My very secret motherfucking passphrase.');
+    #$self->secret('My very secret motherfucking passphrase.');
     ## New style ...
     $self->secrets(['My very secret motherfucking passphrase.']);
 
@@ -60,6 +60,8 @@ sub startup {
         $r->get("/$api_vers/$action/:service/:product/#host/:user/#caller"   )->to( "action-$action#$action" );
     }
 
+    $r->get("/$api_vers/check/:lock_id"   )->to( "action-check#check" );
+
     ## Default
     $r->get('/v1/' )->to(
         cb  => sub {
@@ -76,7 +78,7 @@ __END__
 
 =head1 NAME
 
-LockAPI - Blah blah blah
+LockAPI - REST based centralized locking service
 
 =head1 SYNOPSIS
 

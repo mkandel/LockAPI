@@ -21,8 +21,8 @@ sub add {
 #        'dryrun'     => 1,
     };
 
-    my $ret->{'status'} = 200;
     my $status = 200; ## Assume OK until something borks ...
+    my $ret->{'status'} = $status; ## Not sure what I was thinking with both of these but whatever ...
     my $stash = $self->stash();
 
     $conf->{'service'} = $stash->{'service'};
@@ -33,6 +33,7 @@ sub add {
     $conf->{'extra'  } = $stash->{'extra'};
     $conf->{'created'} = $created;
     $conf->{'expires'} = $stash->{'expires'};
+
     if (  ! defined $conf->{'expires'} || $conf->{'expires'} < 1 ){ ## zero or -1 indicate default expiration ...
         $conf->{'expires'} = $created + ( 60 * 60 * 24 ); ## default to 24 hours after created time
     }
@@ -55,7 +56,7 @@ sub add {
 
     $self->stash->{'lock_id'} = $ret->{'lock_id'};
 
-    $text = "\n<HR><PRE>\n";
+    $text .= "\n<HR><PRE>\n";
     $text .= Dumper $stash;
     $text .= "\n</PRE>\n";
 
