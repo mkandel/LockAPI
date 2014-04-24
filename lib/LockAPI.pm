@@ -59,7 +59,8 @@ sub startup {
     foreach my $action ( qw{ list check } ){
         $r->get("/$api_vers/$action/:service/:product/#host/:user/#caller"   )->to( "action-$action#$action" );
     }
-
+    
+    ## Check by lock_id
     $r->get("/$api_vers/check/:lock_id"   )->to( "action-check#check" );
 
     ## Default
