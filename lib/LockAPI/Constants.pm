@@ -9,4 +9,9 @@ our %method_for = (
     'check'   => 'get',
 );
 
+our %errs = (
+    598     => 'Insert Failed',
+    599     => 'Select Failed',
+);
+
 1;

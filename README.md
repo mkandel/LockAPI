@@ -12,7 +12,7 @@
 
 # NAME
 
-LockAPI - Blah blah blah
+LockAPI - REST based centralized locking service
 
 # SYNOPSIS
 

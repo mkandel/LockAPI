@@ -35,7 +35,7 @@ my $conf = LockAPI::Config->new();
 #my $conf = LockAPI::Config->new({ 'debug' => 1 });
 
 my $user = getlogin;
-my ( $product, $service, $host, $app, $expires, $extra_JSON );
+my ( $product, $service, $host, $app, $expires, $extra_JSON, $lock_id );
 my $lock_srv = $conf->server()    || 'localhost';
 my $srv_port = $conf->port()      || 3000;
 my $api_vers = $conf->api_version || 'v1';
@@ -94,6 +94,12 @@ if ( $debug ){
     print "Meth   : '$method'\n";
     print "Extra  : '$extra_JSON'\n" if $extra_JSON;
     print "\n";
+}
+
+## Handle special cases here:
+if ( $action eq 'check' && $lock_id ){
+    ## We're checking by lock_id, URL needs to change ...
+    $url = "http://$lock_srv/$api_vers/$action/$lock_id/";
 }
 
 my $ua = LWP::UserAgent->new();

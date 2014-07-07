@@ -1,5 +1,5 @@
 {
-   "abstract" : "Blah blah blah",
+   "abstract" : "REST based centralized locking service",
    "author" : [
       "Marc Kandel <marc.kandel.cpan@gmail.com>"
    ],

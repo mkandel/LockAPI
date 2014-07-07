@@ -15,7 +15,7 @@ sub check {
         lock_id    => $self->stash()->{ 'lock_id' } || -1,
     };
 
-    my $text;
+    my $text = '';
     if ( $conf->{ 'debug' } ){
         $text .= "Stash:<BR><PRE>";
         $text .= Dumper $self->stash();
@@ -26,10 +26,10 @@ sub check {
 
     my $db = LockAPI::DB::Sqlite->new();
 
-    my $ret;
+    my $ret->{'status'} = 200;
 
     eval{
-        $ret = $db->check( $conf, $self->app->log );
+        $ret = $db->check( $conf );
     };
 
     if ( $conf->{ 'debug' } ){
@@ -37,8 +37,12 @@ sub check {
         $text .= Dumper $ret;
         $text .= "</PRE>";
 
-        $self->render( text => "$text" );
+        $self->app->log->debug("$text");
     }
+    $self->render( text => "$text", status => $ret->{'status'} );
 }
 
 1;
+
+__END__
+

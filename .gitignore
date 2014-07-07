@@ -13,3 +13,7 @@ script/test_sqlite.pl
 out.*
 out
 LICENSE
+Makefile
+blib/*
+blib
+pm_to_blib

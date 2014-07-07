@@ -40,10 +40,10 @@ sub add {
 
 
     eval{
-        $ret = $db->add( $conf, $self->app->log );
+        $ret = $db->add( $confg );
     };
 
-    my $text;
+    my $text = '';
 
     if ( $@ ){
         if ( $@ =~ m/UNIQUE constraint failed/ ){
@@ -56,19 +56,18 @@ sub add {
 
     $self->stash->{'lock_id'} = $ret->{'lock_id'};
 
-    $text .= "\n<HR><PRE>\n";
-    $text .= Dumper $stash;
-    $text .= "\n</PRE>\n";
-
 
     if ( $ret && defined $self->{'debug'} ){
+        $text .= "\n<HR><PRE>\n";
+        $text .= Dumper $stash;
+        $text .= "\n</PRE>\n";
+
         $text .= "<HR>\n";
         $text .= Dumper $ret;
         $text .= '<BR>';
     }
 
-#    $self->app->log->debug("$text");
-
+    $self->app->log->debug("$text");
     $self->render( text => "$text", status => $ret->{'status'} );
 }
 
