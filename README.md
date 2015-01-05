@@ -28,6 +28,6 @@ Marc Kandel <marc.kandel.cpan@gmail.com>
 
 # COPYRIGHT
 
-Copyright 2014- Marc Kandel
+Copyright 2014 - 2015 Marc Kandel
 
 # SEE ALSO
