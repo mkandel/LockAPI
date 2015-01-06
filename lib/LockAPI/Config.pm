@@ -25,13 +25,14 @@ sub new {
         'server'       => '^\w+$',
         'port'         => '^[0-9]+$',
         'api_version'  => '^\w+$',
+        'log_dir'      => '',
     };
     ## Automatic getter/setter creation
     ## Use for simple get_foo set_foo creation
     while ( my ( $field, $rule ) = each %{ $self->{ 'fields' } } ) {
         no warnings 'redefine';
         no strict 'refs';
-        #my $func = __PACKAGE__ . "::set_" . $field;
+
         my $func = __PACKAGE__ . "::" . $field;
         print "creating $func()\n" if $self->{'debug'};
         *$func = sub {
