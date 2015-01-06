@@ -8,15 +8,15 @@ sub new {
     my $self = shift || {};
     my $conf_dir;
 
+    print "Checking for '$ENV{HOME}/.lockapirc'\n" if $self->{ 'debug' };
     if ( -e "$ENV{HOME}/.lockapirc" ){
         ## Developer convenience :P
         $self->{ 'conf_file' } = "$ENV{HOME}/.lockapirc";
-        print "Setting conf_file to '$conf_dir/lockapi.cfg'\n" if $self->{ 'debug' };;
-
+        print "Setting conf_file to '$ENV{HOME}/.lockapirc'\n" if $self->{ 'debug' };
     } elsif ( -e "$FindBin::Bin/../config/lockapi.cfg" ){
         ## In a build tree/deploy
         $self->{ 'conf_file' } = "$FindBin::Bin/../config/lockapi.cfg";
-        print "Setting conf_file to '$conf_dir/lockapi.cfg'\n" if $self->{ 'debug' };;
+        print "Setting conf_file to '$FindBin::Bin/../config/lockapi.cfg'\n" if $self->{ 'debug' };
     } else {
         croak "new: cannot find config file ...\n";
     }

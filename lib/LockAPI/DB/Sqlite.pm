@@ -13,10 +13,12 @@ sub new {
     my $dir    = $config->db_path();
     my $db    = $dir . '/LockDB.sqlite';
 
-    my $self->{'dbh'}   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or croak $DBI::errstr;
+    my $self->{'dbh'}   = DBI->connect("dbi:SQLite:dbname=$db","","", { }) or croak $DBI::errstr;
+    #my $self->{'dbh'}   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or croak $DBI::errstr;
     $self->{'table'} = 'locks';
 
     $self->{'log'} = Mojo::Log->new( path => '/tmp/lockapi.log' );
+    $self->{'_config'} = $config;
 
     return bless $self, $class;
 }
@@ -30,9 +32,22 @@ sub add {
 
     my $fprint = "$conf->{'service'}_$conf->{'product'}_$conf->{'host'}";
 
-    my $sql = "INSERT INTO $self->{'table'} ( service, product, host, user, caller, created, expires, extra, fingerprint ) VALUES ( '$conf->{'service'}', '$conf->{'product'}', '$conf->{'host'}', '$conf->{'user'}', '$conf->{'caller'}', $conf->{'created'}, $conf->{'expires'}, '$conf->{'extra'}', '$fprint' );";
+    my $sql =
+        "INSERT INTO $self->{'table'} ( resource, service, product, host, user, caller, created, expires, extra, fingerprint )
+        VALUES (
+            '$conf->{'resource'}',
+            '$conf->{'service'}',
+            '$conf->{'product'}',
+            '$conf->{'host'}',
+            '$conf->{'user'}',
+            '$conf->{'caller'}',
+            '$conf->{'created'}',
+            '$conf->{'expires'}',
+            '$conf->{'extra'}',
+            '$fprint' 
+        );";
 
-    if ( $conf->{'debug'} ){
+    if ( $conf->{'_config'}->{'debug'} ){
         $self->{'log'}->debug( "** " . __PACKAGE__ . "::add(): Will run '$sql'\n" );
     }
 
@@ -42,7 +57,7 @@ sub add {
         }
     };
     #croak $@ if $@;
-    if ( $@ ){
+    if ( DBI::errstr ){
         $self->{'status'} = 598;
         $ret->{'status'} = 598;
         $ret->{'error'} = DBI::errstr || 'No DBI::errstr returned ...';
@@ -62,7 +77,7 @@ sub add {
         }
     };
     #croak $@ if $@;
-    if ( $@ ){
+    if ( DBI::errstr ){
         $self->{'status'} = 599;
         $ret->{'status'} = 599;
         $ret->{'error'} = DBI::errstr || 'No DBI::errstr returned ...';

@@ -39,9 +39,8 @@ sub add {
         $conf->{'expires'} = $created + ( 60 * 60 * 24 ); ## default to 24 hours after created time
     }
 
-
     eval{
-        $ret = $db->add( $confg );
+        $ret = $db->add( $conf );
     };
 
     my $text = '';
@@ -57,7 +56,7 @@ sub add {
     $self->stash->{'lock_id'} = $ret->{'lock_id'};
 
 
-    if ( $ret && defined $self->{'debug'} ){
+    if ( $ret && $self->{'debug'} ){
         $text .= "\n<HR><PRE>\n";
         $text .= Dumper $stash;
         $text .= "\n</PRE>\n";

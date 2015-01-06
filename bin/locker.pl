@@ -31,8 +31,8 @@ local $| = 1;
 my $debug  = 0;
 my $dryrun = 0;
 
-my $conf = LockAPI::Config->new();
-#my $conf = LockAPI::Config->new({ 'debug' => 1 });
+#my $conf = LockAPI::Config->new();
+my $conf = LockAPI::Config->new({ 'debug' => $debug });
 
 my $user = getlogin;
 my ( $product, $service, $host, $app, $expires, $extra_JSON, $lock_id, $resource );
@@ -82,7 +82,7 @@ $expires = $expires || time + ( 60 * 60 * 24 );
 $extra_JSON = $extra_JSON || '';
 
 my $method = $LockAPI::Constants::method_for{ $action };
-my $url = "http://$lock_srv/$api_vers/$resource/$action/$service/$product/$host/$user/$app/$expires/$extra_JSON";
+my $url = "http://$lock_srv/$api_vers/$action/$resource/$service/$product/$host/$user/$app/$expires/$extra_JSON";
 
 if ( $debug ){
     print "Action  : '$action'\n";
@@ -108,7 +108,7 @@ my $ua = LWP::UserAgent->new();
 $ua->timeout( 30 );
 
 my $resp = $ua->$method( $url );
-print Dumper $resp;
+
 if ( $debug ){
     print "========================================================\n";
     print Dumper $resp;
@@ -116,9 +116,12 @@ if ( $debug ){
     my $out = $resp->content();
     $out =~ s/&nbsp;/ /g;
     $out =~ s/<BR>/\n/gi;
+    print Dumper $out;
+    print "========================================================\n";
     
     my $lockId;
-    if ( defined $resp->content()->{'lock_id'} ){
+    #if ( ref $resp->content() eq 'HASH' && defined $resp->content()->{'lock_id'} ){
+    if ( ref $resp->content() eq 'HASH' ){
         $lockId = $resp->content()->{'lock_id'};
     } else {
         $lockId = 'Failed';
