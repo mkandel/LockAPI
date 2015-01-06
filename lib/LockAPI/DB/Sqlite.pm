@@ -18,7 +18,7 @@ sub new {
     my $self->{'dbh'}   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or croak $DBI::errstr;
     $self->{'table'} = 'locks';
 
-    $self->{'log'} = Mojo::Log->new();
+    $self->{'log'} = Mojo::Log->new( path => '/tmp/lockapi.log' );
 
     return bless $self, $class;
 }

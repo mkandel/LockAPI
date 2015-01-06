@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-    <head><title>LockAPI Ping</title></head>
+<head><title><%= title %></title></head>
     <body>
         <%= content %>
-        <%== localtime( time ) %>
+        <%= localtime( time ) %>
     </body>
 </html>

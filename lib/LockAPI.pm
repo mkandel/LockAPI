@@ -13,6 +13,8 @@ our $VERSION = '0.01';
 sub startup {
     my $self = shift;
 
+    $self->app->log->new( path => "/tmp/lockapi.log" );
+
     my $config = LockAPI::Config->new();
     my $api_vers = $config->api_version() || 'v1';
 
