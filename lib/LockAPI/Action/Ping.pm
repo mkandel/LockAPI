@@ -18,14 +18,14 @@ sub ping {
     my $stash = $self->stash();
     use Data::Dumper;
     print Dumper $stash;
-#    $self->stash( 'now'   => localtime( time ) );
+
     $self->stash( 'title' => 'LockAPI Ping Page' );
 
     my $text = "Ping: " . localtime( time );
     $self->stash( text => $text );
     $self->app->log->new( path => '/tmp/lockapi.log' );
     $self->app->log->debug( time . ": $text");
-#    $self->render( text => "$text", status => $ret->{'status'} );
+
 }
 
 1;
