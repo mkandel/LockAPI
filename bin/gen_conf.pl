@@ -58,9 +58,7 @@ if ( $debug ){
     print "OUT [$conf_file]: \n$out\n";
 } else {
     open my $OUT, '>', $conf_file || die "Error opening '$conf_file': $!\n";
-
     print $OUT $out;
-
     close $OUT || die "Error closing '$conf_file': $!\n";
 }
 

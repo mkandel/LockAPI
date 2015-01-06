@@ -1,4 +1,5 @@
 lockId - integer - autoincrement - unique - non null - primary key
+resource - varchar(100) - not null
 service - varchar(100) - not null
 product - varchar(100) - not null
 host - varchar(200) - not null

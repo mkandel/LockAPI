@@ -44,7 +44,6 @@ sub add {
     };
 
     my $text = '';
-
     if ( $@ ){
         if ( $@ =~ m/UNIQUE constraint failed/ ){
             $text .= "UNIQUE constraint failed\n";

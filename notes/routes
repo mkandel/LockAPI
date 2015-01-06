@@ -1,14 +1,14 @@
-/add/:service/:product/:host/:user/:app/:?extra
-/add/:service/:product/:host/:user/:app/:expires/:?extra
+/add/:resource/:service/:product/:host/:user/:app/:?extra
+/add/:resource/:service/:product/:host/:user/:app/:expires/:?extra
 
 /delete/:lockId
-/delete/:service/:product/:host/:user/:app
+/delete/:resource/:service/:product/:host/:user/:app
 
 /check/:lockId
-/check/:service/:product/:host/:user/:app
+/check/:resource/:service/:product/:host/:user/:app
 
 /list/
-/list/:service/:product/:host/:user/:app
+/list/:resource/:service/:product/:host/:user/:app
 ## Maybe ...
 /list/filter/:filter
 
@@ -20,6 +20,7 @@ Key:
 :?         - optional variable
 
 Glossary:
+resource   - the resource you're locing.  Can be anything, network port, a file, a script, anything
 service    - logical environment (dev3/load3)
 product    - product being worked on (buyer/s4/auc)
 host       - host being locked
