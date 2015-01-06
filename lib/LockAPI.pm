@@ -13,19 +13,23 @@ our $VERSION = '0.01';
 sub startup {
     my $self = shift;
 
-    my $conf = LockAPI::Config->new();
-    my $api_vers = $conf->api_version() || 'v1';
+    $self->app->log->new( path => "/tmp/lockapi.log" );
+
+    my $config = LockAPI::Config->new();
+    my $api_vers = $config->api_version() || 'v1';
 
     ## We can change the DB type by changing this logic to config based:
     my $db = LockAPI::DB::Sqlite->new();
 
-    $self->stash( 'db' => $db );
+    $self->stash( 'db'     => $db );
+    $self->stash( 'config' => $config );
 
     ## Shutup supid secret warning ...
     ## Old style, pre-5.18?
     #$self->secret('My very secret motherfucking passphrase.');
     ## New style ...
-    $self->secrets(['My very secret motherfucking passphrase.']);
+    $self->secrets(['fdshgfjgjfdkgjebjdhsaajfsadgjhfgakjdgfjagdsfnbdsfagdfjag']);
+    #$self->secrets(['My very secret motherfucking passphrase.']);
 
     # Router
     my $r = $self->routes;
@@ -33,32 +37,34 @@ sub startup {
     ## API v1 routes
     ## PUT
     ## add:
-    $r->any("/$api_vers/add/:service/:product/#host/:user/#caller"  )->to("action-add#add" );
-    $r->any("/$api_vers/add/:service/:product/#host/:user/#caller/:expires" )->to("action-add#add" );
-    $r->any("/$api_vers/add/:service/:product/#host/:user/#caller/:expires/(*extra)" )
+    $r->any("/$api_vers/add/:resource/:service/:product/#host/:user/#caller"  )->to("action-add#add" );
+    $r->any("/$api_vers/add/:resource/:service/:product/#host/:user/#caller/:expires" )->to("action-add#add" );
+    $r->any("/$api_vers/add/:resource/:service/:product/#host/:user/#caller/:expires/(*extra)" )
         ->to("action-add#add" );
-    $r->any("/$api_vers/add/:service/:product/#host/:user/#caller/(*extra)" )->to("action-add#add" );
+    $r->any("/$api_vers/add/:resource/:service/:product/#host/:user/#caller/(*extra)" )->to("action-add#add" );
 
 =pod
 
     foreach my $action ( qw{ add delete modify } ){
         ## These need to be PUT but for testing in a browser ... need to use ANY ...
-        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller/(:expires)", expires => qr/\d+/  )->to("action-$action#$action" );
-        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller/(:expires)", expires => qr/\d+/  )->to("action-$action#$action" );
-        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller/(:expires)/(*extra"), expires => qr/\d+/  )->to("action-$action#$action" );
-        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller/(:expires)/(*extra)", expires => qr/\d+/  )->to("action-$action#$action" );
-        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller/(*extra)"  )->to("action-$action#$action" );
-        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller/(*extra)"  )->to("action-$action#$action" );
-        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
-        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
+        #$r->put("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(:expires)", expires => qr/\d+/  )->to("action-$action#$action" );
+        $r->any("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(:expires)", expires => qr/\d+/  )->to("action-$action#$action" );
+        #$r->put("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(:expires)/(*extra"), expires => qr/\d+/  )->to("action-$action#$action" );
+        $r->any("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(:expires)/(*extra)", expires => qr/\d+/  )->to("action-$action#$action" );
+        #$r->put("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(*extra)"  )->to("action-$action#$action" );
+        $r->any("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(*extra)"  )->to("action-$action#$action" );
+        #$r->put("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
+        $r->any("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
     }
 
 =cut
 
     ## GET
     foreach my $action ( qw{ list check } ){
-        $r->get("/$api_vers/$action/:service/:product/#host/:user/#caller"   )->to( "action-$action#$action" );
+        $r->get("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller"   )->to( "action-$action#$action" );
     }
+    ## ping link
+    $r->get("/$api_vers/ping"   )->to( "action-ping#ping" );
     
     ## Check by lock_id
     $r->get("/$api_vers/check/:lock_id"   )->to( "action-check#check" );

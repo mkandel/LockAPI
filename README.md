@@ -1,13 +1,13 @@
     foreach my $action ( qw{ add delete modify } ){
         ## These need to be PUT but for testing in a browser ... need to use ANY ...
-        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller/(:expires)", expires => qr/\d+/  )->to("action-$action#$action" );
-        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller/(:expires)", expires => qr/\d+/  )->to("action-$action#$action" );
-        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller/(:expires)/(*extra"), expires => qr/\d+/  )->to("action-$action#$action" );
-        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller/(:expires)/(*extra)", expires => qr/\d+/  )->to("action-$action#$action" );
-        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller/(*extra)"  )->to("action-$action#$action" );
-        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller/(*extra)"  )->to("action-$action#$action" );
-        #$r->put("/$api_vers/$action/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
-        $r->any("/$api_vers/$action/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
+        #$r->put("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(:expires)", expires => qr/\d+/  )->to("action-$action#$action" );
+        $r->any("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(:expires)", expires => qr/\d+/  )->to("action-$action#$action" );
+        #$r->put("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(:expires)/(*extra"), expires => qr/\d+/  )->to("action-$action#$action" );
+        $r->any("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(:expires)/(*extra)", expires => qr/\d+/  )->to("action-$action#$action" );
+        #$r->put("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(*extra)"  )->to("action-$action#$action" );
+        $r->any("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(*extra)"  )->to("action-$action#$action" );
+        #$r->put("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
+        $r->any("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
     }
 
 # NAME

@@ -25,14 +25,15 @@ sub add {
     my $ret->{'status'} = $status; ## Not sure what I was thinking with both of these but whatever ...
     my $stash = $self->stash();
 
-    $conf->{'service'} = $stash->{'service'};
-    $conf->{'product'} = $stash->{'product'};
-    $conf->{'host'   } = $stash->{'host'};
-    $conf->{'user'   } = $stash->{'user'};
-    $conf->{'caller' } = $stash->{'caller'};
-    $conf->{'extra'  } = $stash->{'extra'};
-    $conf->{'created'} = $created;
-    $conf->{'expires'} = $stash->{'expires'};
+    $conf->{'service'  } = $stash->{'service'};
+    $conf->{'resource' } = $stash->{'resource'};
+    $conf->{'product'  } = $stash->{'product'};
+    $conf->{'host'     } = $stash->{'host'};
+    $conf->{'user'     } = $stash->{'user'};
+    $conf->{'caller'   } = $stash->{'caller'};
+    $conf->{'extra'    } = $stash->{'extra'};
+    $conf->{'created'  } = $created;
+    $conf->{'expires'  } = $stash->{'expires'};
 
     if (  ! defined $conf->{'expires'} || $conf->{'expires'} < 1 ){ ## zero or -1 indicate default expiration ...
         $conf->{'expires'} = $created + ( 60 * 60 * 24 ); ## default to 24 hours after created time
