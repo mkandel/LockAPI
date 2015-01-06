@@ -6,11 +6,17 @@ use Carp;
 sub new {
     my $class = shift;
     my $self = shift || {};
-    my $conf_file = "$FindBin::Bin/../config";
+    my $conf_dir;
 
-    if ( -e "$conf_file/lockapi.cfg" ){
-        $self->{ 'conf_file' } = "$conf_file/lockapi.cfg";
-        print "Setting conf_file to '$conf_file/lockapi.cfg'\n" if $self->{ 'debug' };;
+    if ( -e "$ENV{HOME}/.lockapirc" ){
+        ## Developer convenience :P
+        $self->{ 'conf_file' } = "$ENV{HOME}/.lockapirc";
+        print "Setting conf_file to '$conf_dir/lockapi.cfg'\n" if $self->{ 'debug' };;
+
+    } elsif ( -e "$FindBin::Bin/../config/lockapi.cfg" ){
+        ## In a build tree/deploy
+        $self->{ 'conf_file' } = "$FindBin::Bin/../config/lockapi.cfg";
+        print "Setting conf_file to '$conf_dir/lockapi.cfg'\n" if $self->{ 'debug' };;
     } else {
         croak "new: cannot find config file ...\n";
     }
