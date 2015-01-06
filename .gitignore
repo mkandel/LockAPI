@@ -19,3 +19,4 @@ Makefile
 blib/*
 blib
 pm_to_blib
+*.bak

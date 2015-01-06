@@ -26,7 +26,8 @@ sub startup {
     ## Old style, pre-5.18?
     #$self->secret('My very secret motherfucking passphrase.');
     ## New style ...
-    $self->secrets(['My very secret motherfucking passphrase.']);
+    $self->secrets(['fdshgfjgjfdkgjebjdhsaajfsadgjhfgakjdgfjagdsfnbdsfagdfjag']);
+    #$self->secrets(['My very secret motherfucking passphrase.']);
 
     # Router
     my $r = $self->routes;
@@ -61,7 +62,7 @@ sub startup {
         $r->get("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller"   )->to( "action-$action#$action" );
     }
     ## ping link
-    $r->get("/$api_vers/ping"   )->to( "ping#ping" );
+    $r->get("/$api_vers/ping"   )->to( "action-ping#ping" );
     
     ## Check by lock_id
     $r->get("/$api_vers/check/:lock_id"   )->to( "action-check#check" );
