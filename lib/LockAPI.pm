@@ -13,10 +13,10 @@ our $VERSION = '0.01';
 sub startup {
     my $self = shift;
 
-    $self->app->log->new( path => "/tmp/lockapi.log" );
-
     my $config = LockAPI::Config->new();
     my $api_vers = $config->api_version() || 'v1';
+
+    $self->app->log->new( path => $config->log_dir() || "/tmp/lockapi_server.log" );
 
     ## We can change the DB type by changing this logic to config based:
     my $db = LockAPI::DB::Sqlite->new();

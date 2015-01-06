@@ -10,7 +10,7 @@
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
-      "version" : 2
+      "version" : "2"
    },
    "name" : "LockAPI",
    "no_index" : {
@@ -60,6 +60,7 @@
    },
    "version" : "0.01",
    "x_contributors" : [
+      "Marc Kandel <mkandel@ariba.com>",
       "mkandel <marc.kandel.cpan@gmail.com>",
       "mkandel <marc.kandel.junk@gmail.com>"
    ]
