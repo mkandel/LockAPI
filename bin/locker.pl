@@ -35,7 +35,7 @@ my $conf = LockAPI::Config->new();
 #my $conf = LockAPI::Config->new({ 'debug' => 1 });
 
 my $user = getlogin;
-my ( $product, $service, $host, $app, $expires, $extra_JSON, $lock_id );
+my ( $product, $service, $host, $app, $expires, $extra_JSON, $lock_id, $resource );
 my $lock_srv = $conf->server()    || 'localhost';
 my $srv_port = $conf->port()      || 3000;
 my $api_vers = $conf->api_version || 'v1';
@@ -48,12 +48,13 @@ GetOptions(
     "dryrun|n"       => sub { $dryrun = 1; $debug = 1; },
     "user|u=s"       => \$user,
     "product|p=s"    => \$product,
+    "resource|r=s"   => \$resource,
     "service|s=s"    => \$service,
     "host|o=s"       => \$host,
     "app|a=s"        => \$app,
     "expires|e=i"    => \$expires,
     "extra|x=s"      => \$extra_JSON,
-    "server|r=s"     => \$lock_srv,
+    "server|v=s"     => \$lock_srv,
     "port|t=i"       => \$srv_port,
 ) || pod2usage( 1 );
 
