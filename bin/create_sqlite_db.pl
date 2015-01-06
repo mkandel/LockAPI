@@ -25,6 +25,7 @@ my $fields = {
     'lock_id'     => { 'type' => 'INTEGER', 'key' => 1, 'null' => 0, 'unique' => 1, },
     'created'     => { 'type' => 'INTEGER', 'key' => 0, 'null' => 0, 'unique' => 0, },
     'expires'     => { 'type' => 'INTEGER', 'key' => 0, 'null' => 0, 'unique' => 0, },
+    'resource'    => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
     'service'     => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
     'product'     => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
     'host'        => { 'type' => 'TEXT',    'key' => 0, 'null' => 0, 'unique' => 0, },
