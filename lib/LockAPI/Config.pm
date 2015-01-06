@@ -26,6 +26,7 @@ sub new {
         'port'         => '^[0-9]+$',
         'api_version'  => '^\w+$',
         'log_dir'      => '',
+        'db_path'      => '',
     };
     ## Automatic getter/setter creation
     ## Use for simple get_foo set_foo creation
