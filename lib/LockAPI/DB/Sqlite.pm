@@ -8,7 +8,13 @@ sub new {
     my $class = shift;
     my $self = {};
 
+    #use Cwd;
+    #my $dir = getcwd;
+    #$dir =~ s/.build.*//;
+
+    #my $db    = $dir . '/data/LockDB.sqlite';
     my $db    = 'data/LockDB.sqlite';
+
     my $self->{'dbh'}   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or croak $DBI::errstr;
     $self->{'table'} = 'locks';
 
@@ -70,6 +76,9 @@ sub add {
         $self->{'log'}->debug( "** " . __PACKAGE__ . "::add(): Created lock_id '$ret->{'lock_id'}' **" );
         $self->{'log'}->debug( "** " . __PACKAGE__ . "::add(): Returning: '$out' **" );
     }
+    print "******************************\n";
+    print Dumper $ret;
+    print "******************************\n";
 
     return $ret || croak __PACKAGE__, '::add(): Unrecoverable error ...';
 }

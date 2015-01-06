@@ -82,18 +82,19 @@ $expires = $expires || time + ( 60 * 60 * 24 );
 $extra_JSON = $extra_JSON || '';
 
 my $method = $LockAPI::Constants::method_for{ $action };
-my $url = "http://$lock_srv/$api_vers/$action/$service/$product/$host/$user/$app/$expires/$extra_JSON";
+my $url = "http://$lock_srv/$api_vers/$resource/$action/$service/$product/$host/$user/$app/$expires/$extra_JSON";
 
 if ( $debug ){
-    print "Action : '$action'\n";
-    print "Product: '$product'\n";
-    print "Service: '$service'\n";
-    print "Host   : '$host'\n";
-    print "App    : '$app'\n";
-    print "Expires: '$expires'\n";
-    print "URL    : '$url'\n";
-    print "Meth   : '$method'\n";
-    print "Extra  : '$extra_JSON'\n" if $extra_JSON;
+    print "Action  : '$action'\n";
+    print "Product : '$product'\n";
+    print "Service : '$service'\n";
+    print "Resource: '$resource'\n";
+    print "Host    : '$host'\n";
+    print "App     : '$app'\n";
+    print "Expires : '$expires'\n";
+    print "URL     : '$url'\n";
+    print "Meth    : '$method'\n";
+    print "Extra   : '$extra_JSON'\n" if $extra_JSON;
     print "\n";
 }
 
@@ -109,14 +110,22 @@ $ua->timeout( 30 );
 my $resp = $ua->$method( $url );
 print Dumper $resp;
 if ( $debug ){
-    #print Dumper $resp;
+    print "========================================================\n";
+    print Dumper $resp;
+    print "========================================================\n";
     my $out = $resp->content();
     $out =~ s/&nbsp;/ /g;
     $out =~ s/<BR>/\n/gi;
     
+    my $lockId;
+    if ( defined $resp->content()->{'lock_id'} ){
+        $lockId = $resp->content()->{'lock_id'};
+    } else {
+        $lockId = 'Failed';
+    }
     print "Method used: ", $resp->request()->method(), "\n";
     print "Return code: ", $resp->code(), "\n";
-    print "Lock ID    : ", $resp->content()->{'lock_id'}, "\n";
+    print "Lock ID    : $lockId\n";
     print "Content    :\n$out\n";
 }
 

@@ -8,6 +8,7 @@ MYMETA.*
 log
 log/*
 data/*
+t/data/*
 script/test_sqlite.pl
 *.sw*
 out.*
