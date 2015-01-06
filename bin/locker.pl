@@ -114,22 +114,25 @@ if ( $debug ){
     print Dumper $resp;
     print "========================================================\n";
     my $out = $resp->content();
-    $out =~ s/&nbsp;/ /g;
-    $out =~ s/<BR>/\n/gi;
+#    $out =~ s/&nbsp;/ /g;
+#    $out =~ s/<BR>/\n/gi;
     print Dumper $out;
+#    print "$out\n";
     print "========================================================\n";
+
+    my $coder = JSON->new->ascii->pretty->allow_nonref;
+    my $json = $coder->decode( $out );
     
     my $lockId;
-    #if ( ref $resp->content() eq 'HASH' && defined $resp->content()->{'lock_id'} ){
-    if ( ref $resp->content() eq 'HASH' ){
-        $lockId = $resp->content()->{'lock_id'};
+    if ( ref $json eq 'HASH' ){
+        $lockId = $json->{'lock_id'};
     } else {
         $lockId = 'Failed';
     }
     print "Method used: ", $resp->request()->method(), "\n";
     print "Return code: ", $resp->code(), "\n";
     print "Lock ID    : $lockId\n";
-    print "Content    :\n$out\n";
+    print "Content    :\n\t$out\n";
 }
 
 #########################################################################################

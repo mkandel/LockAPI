@@ -4,6 +4,7 @@ use DBI;
 use DBD::SQLite;
 use Data::Dumper;
 use LockAPI::Config;
+use LockAPI::Utils qw{ fingerprint };
 
 sub new {
     my $class = shift;
@@ -30,7 +31,12 @@ sub add {
     my $ret->{'lock_id'} = -1;
     $ret->{'status'} = 200;
 
-    my $fprint = "$conf->{'service'}_$conf->{'product'}_$conf->{'host'}";
+    my $fprint = fingerprint( { 
+            service  => $conf->{'service'},
+            product  => $conf->{'product'},
+            host     => $conf->{'host'},
+            resource => $conf->{'resource'},
+    } );
 
     my $sql =
         "INSERT INTO $self->{'table'} ( resource, service, product, host, user, caller, created, expires, extra, fingerprint )
@@ -61,7 +67,7 @@ sub add {
         $self->{'status'} = 598;
         $ret->{'status'} = 598;
         $ret->{'error'} = DBI::errstr || 'No DBI::errstr returned ...';
-        #croak $@;
+        croak DBI::errstr;
     }
 
     $sql = "SELECT lock_id FROM locks WHERE fingerprint = '$fprint';";
@@ -81,7 +87,7 @@ sub add {
         $self->{'status'} = 599;
         $ret->{'status'} = 599;
         $ret->{'error'} = DBI::errstr || 'No DBI::errstr returned ...';
-        #croak $@;
+        croak DBI::errstr;
     }
 
     if ( defined $conf->{'debug'} ){

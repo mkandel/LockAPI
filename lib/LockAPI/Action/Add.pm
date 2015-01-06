@@ -1,7 +1,7 @@
 package LockAPI::Action::Add;
 use Mojo::Base 'Mojolicious::Controller';
 use Carp;
-use YAML::Syck;
+use JSON::XS;
 use URI::Escape;
 use Data::Dumper;
 
@@ -21,8 +21,9 @@ sub add {
 #        'dryrun'     => 1,
     };
 
-    my $status = 200; ## Assume OK until something borks ...
-    my $ret->{'status'} = $status; ## Not sure what I was thinking with both of these but whatever ...
+#    my $status = 200; ## Assume OK until something borks ...
+#    my $ret->{'status'} = $status; ## Not sure what I was thinking with both of these but whatever ...
+    my $ret;
     my $stash = $self->stash();
 
     $conf->{'service'  } = $stash->{'service'};
@@ -67,7 +68,8 @@ sub add {
     }
 
     $self->app->log->debug("$text");
-    $self->render( text => "$text", status => $ret->{'status'} );
+    $self->render( json => $ret );
+    #$self->render( text => $ret, status => $ret->{'status'} );
 }
 
 1;
@@ -77,6 +79,7 @@ __END__
 my $sql = "
     INSERT INTO locks ( service, product, host, user, caller, created, expires, extra, fingerprint )
     VALUES (
+        $self->{'resource'},
         $self->{'service'},
         $self->{'product'},
         $self->{'host'},
@@ -89,5 +92,5 @@ my $sql = "
     );";
 
 ##
-## Fingerprint is calculated by LockAPI::DB::Sqlite
+## Fingerprint is calculated by LockAPI::Utils->fingerprint()
 ##
