@@ -95,7 +95,7 @@ Marc Kandel E<lt>marc.kandel.cpan@gmail.comE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2014- Marc Kandel
+Copyright 2014 - 2015 Marc Kandel
 
 =head1 SEE ALSO
 
