@@ -1,0 +1,3 @@
+* Variable return formats - JSON XML
+* Use config to instantiate proper DB type
+* SQL/DB setup for DBs other than SQLite which is the first DB I'm doing

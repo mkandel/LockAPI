@@ -36,7 +36,7 @@ my $server;
 if ( $server_n eq 'morbo' || $server_n eq 'm' ){
     $server = '/usr/local/bin/morbo';
 } elsif ( $server_n eq 'hypnotoad' || $server_n eq 'h' ){
-    $server = '/usr/local/bin/morbo';
+    $server = '/usr/local/bin/hypnotoad';
 } else {
     pod2usage( -message => "Invalid server '$server_n'", -exitval => 2 );
 }
@@ -46,7 +46,6 @@ print "Running '$cmd':\n";
 
 system $cmd;
 
-return;
 
 =head1 NAME
 
