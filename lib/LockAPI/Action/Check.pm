@@ -41,7 +41,8 @@ sub check {
         $val = $db->check_fingerprint( $self->stash() );
     } elsif ( $conf->{'lock_id'} ){
         ## Check by ID
-        $val = $db->check_id( $conf->{'lock_id'} );
+        $val = $db->check_id( $conf->{'lock_id'} )->[0];
+        print "** Val: $val\n **";
     } else {
         $ret->{'status'} = 598;
         $text = "Invalid lock_id: '$conf->{'lock_id'}' - Unrecoverable, bailing, sorry!";

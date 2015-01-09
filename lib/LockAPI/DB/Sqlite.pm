@@ -14,8 +14,17 @@ sub new {
     my $dir    = $config->db_path();
     my $db    = $dir . '/LockDB.sqlite';
 
-    my $self->{'dbh'}   = DBI->connect("dbi:SQLite:dbname=$db","","", { }) or croak $DBI::errstr;
-    #my $self->{'dbh'}   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or croak $DBI::errstr;
+    my $self->{'dbh'}   = DBI->connect("dbi:SQLite:dbname=$db","","",
+        { 
+            RaiseError => 1,
+            AutoCommit => 1,
+
+        }
+    ) or croak $DBI::errstr;
+
+#    my $trace_setting = "3|SQL";
+#    my $trace_filename = '/tmp/lockapi.trace';
+#    DBI->trace($trace_setting, $trace_filename);
     $self->{'table'} = 'locks';
 
     $self->{'log'} = Mojo::Log->new( path => '/tmp/lockapi.log' );
@@ -63,11 +72,11 @@ sub add {
         }
     };
     #croak $@ if $@;
-    if ( DBI::errstr ){
+    if ( $DBI::errstr ){
         $self->{'status'} = 598;
         $ret->{'status'} = 598;
-        $ret->{'error'} = DBI::errstr || 'No DBI::errstr returned ...';
-        croak DBI::errstr;
+        $ret->{'error'} = $DBI::errstr || 'No $DBI::errstr returned ...';
+        croak $DBI::errstr;
     }
 
     $sql = "SELECT lock_id FROM locks WHERE fingerprint = '$fprint';";
@@ -79,15 +88,15 @@ sub add {
     eval{
         unless ( $conf->{'dryrun'} ){
             $self->{'log'}->debug( "** " . __PACKAGE__ . "::add(): Running '$sql'\n" );
-            $ret->{'lock_id'} = $self->{'dbh'}->selectall_arrayref( $sql )->[0]->[0] or croak DBI::errstr;
+            $ret->{'lock_id'} = $self->{'dbh'}->selectall_arrayref( $sql )->[0]->[0] or croak $DBI::errstr;
         }
     };
     #croak $@ if $@;
-    if ( DBI::errstr ){
+    if ( $DBI::errstr ){
         $self->{'status'} = 599;
         $ret->{'status'} = 599;
-        $ret->{'error'} = DBI::errstr || 'No DBI::errstr returned ...';
-        croak DBI::errstr;
+        $ret->{'error'} = $DBI::errstr || 'No $DBI::errstr returned ...';
+        croak $DBI::errstr;
     }
 
     if ( defined $conf->{'debug'} ){
@@ -126,14 +135,16 @@ sub modify {
 
 sub check_id {
     my $self = shift;
-    my $conf = shift || croak "Cannot get entry without data ...\n";
+    my $id = shift || croak "Cannot get entry without data ...\n";
 
-    my $id = $conf->{'lock_id'} || -1;
     my $sql = "SELECT count( lock_id ) FROM locks WHERE lock_id == $id;";
 
-    my $out = $self->{'dbh'}->selectall_arrayref( $sql )->[0]->[0] or die DBI::errstr;
-    print Dumper $out;
-    #print "** $out **\n";
+    print "*** '$sql' ***\n";
+
+    my $out = $self->{'dbh'}->selectall_arrayref( $sql )->[0] or die $DBI::errstr;
+    #my $out = $self->{'dbh'}->selectall_arrayref( $sql )->[0]->[0] or die $DBI::errstr;
+#    print Dumper $out;
+
     return  $out;
 }
 
@@ -153,7 +164,7 @@ sub check_fingerprint {
     my $sql = "SELECT count( lock_id ) FROM locks WHERE fingerprint LIKE '$fprint';";
     $self->{'log'}->debug( "check_fingerprint: '$fprint'" );
 
-    return  $self->{'dbh'}->selectall_arrayref( $sql )->[0]->[0] or croak DBI::errstr;
+    return  $self->{'dbh'}->selectall_arrayref( $sql )->[0]->[0] or croak $DBI::errstr;
 }
 
 1;
