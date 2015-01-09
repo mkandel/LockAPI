@@ -124,14 +124,36 @@ sub modify {
 
 }
 
-sub check {
+sub check_id {
     my $self = shift;
     my $conf = shift || croak "Cannot get entry without data ...\n";
 
-    if ( defined $conf->{'debug'} ){
-        my $out = Dumper $conf;
-        $self->{'log'}->debug( "** " . __PACKAGE__ . "::check(): received: '$out' **" );
-    }
+    my $id = $conf->{'lock_id'} || -1;
+    my $sql = "SELECT count( lock_id ) FROM locks WHERE lock_id == $id;";
+
+    my $out = $self->{'dbh'}->selectall_arrayref( $sql )->[0]->[0] or die DBI::errstr;
+    print Dumper $out;
+    #print "** $out **\n";
+    return  $out;
+}
+
+sub check_fingerprint {
+    my $self = shift;
+    my $conf = shift || croak "Cannot get entry without data ...\n";
+
+    $self->{'log'}->debug( Dumper $conf );
+
+    my $fprint = fingerprint( {
+            service  => $conf->{'service'},
+            product  => $conf->{'product'},
+            host     => $conf->{'host'},
+            resource => $conf->{'resource'},
+    } );
+
+    my $sql = "SELECT count( lock_id ) FROM locks WHERE fingerprint LIKE '$fprint';";
+    $self->{'log'}->debug( "check_fingerprint: '$fprint'" );
+
+    return  $self->{'dbh'}->selectall_arrayref( $sql )->[0]->[0] or croak DBI::errstr;
 }
 
 1;

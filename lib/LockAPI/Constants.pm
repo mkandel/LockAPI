@@ -9,6 +9,7 @@ our %method_for = (
 );
 
 our %errs = (
+    597     => 'Locked',
     598     => 'Insert Failed',
     599     => 'Select Failed',
 );
