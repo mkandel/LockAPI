@@ -18,7 +18,7 @@ sub fingerprint {
 #    print "==", Dumper $args, "==";
 
     ## my $fprint = "$conf->{'service'}_$conf->{'product'}_$conf->{'host'}";
-    my $fprint = "$args->{'service'}_$args->{'product'}_$args->{'host'}";
+    my $fprint = "$args->{'resource'}_$args->{'service'}_$args->{'product'}_$args->{'host'}";
 
 #    my $fprint;
 #    if ( defined $args->{'resource'} ){

@@ -62,6 +62,8 @@ sub add {
             '$fprint' 
         );";
 
+#    print "*** '$sql' ***\n";
+
     if ( $conf->{'_config'}->{'debug'} ){
         $self->{'log'}->debug( "** " . __PACKAGE__ . "::add(): Will run '$sql'\n" );
     }
@@ -137,13 +139,14 @@ sub check_id {
     my $self = shift;
     my $id = shift || croak "Cannot get entry without data ...\n";
 
-    my $sql = "SELECT count( lock_id ) FROM locks WHERE lock_id == $id;";
+    my $now = time;
 
-    print "*** '$sql' ***\n";
+    ## If the "expires" timestamp is >= now, we're still valid
+    my $sql = "SELECT count( lock_id ) FROM locks WHERE lock_id == $id AND expires >= $now;";
+
+#    print "*** '$sql' ***\n";
 
     my $out = $self->{'dbh'}->selectall_arrayref( $sql )->[0] or die $DBI::errstr;
-    #my $out = $self->{'dbh'}->selectall_arrayref( $sql )->[0]->[0] or die $DBI::errstr;
-#    print Dumper $out;
 
     return  $out;
 }
