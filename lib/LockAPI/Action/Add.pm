@@ -47,11 +47,14 @@ sub add {
     my $text = '';
     if ( $@ ){
         if ( $@ =~ m/UNIQUE constraint failed/ ){
-            $text .= "UNIQUE constraint failed\n";
+            $text .= "*UNIQUE constraint failed*\n";
+            $ret->{'error_msg' } = 'FALIED - Lock already exists';
         } else {
             $text .= "Unknown DB Error encountered:\n<BR>\n";
+            $ret->{'error_msg' } = 'Unknown DB Error encountered';
             croak $@;
         }
+        $ret->{'status'} = 598;
     }
 
     $self->stash->{'lock_id'} = $ret->{'lock_id'};
