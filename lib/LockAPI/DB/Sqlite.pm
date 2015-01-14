@@ -125,8 +125,13 @@ sub list {
 
 sub delete {
     my $self = shift;
-    my $conf = shift || croak "Cannot delete entry without data ...\n";
+    my $id   = shift || croak "Cannot delete by ID without an ID to delete!";
 
+    my $sql = "DELETE FROM locks WHERE lock_id == $id;";
+
+    my $out = $self->{'dbh'}->selectall_arrayref( $sql ) or croak $DBI::errstr;
+    print Dumper $out;
+    return $out;
 }
 
 sub modify {
@@ -137,16 +142,15 @@ sub modify {
 
 sub check_id {
     my $self = shift;
-    my $id = shift || croak "Cannot get entry without data ...\n";
+    my $id   = shift || croak "Cannot get entry without data ...\n";
 
-    my $now = time;
+    ## Locks are valid unless they're expired
+    my $now  = time;
 
     ## If the "expires" timestamp is >= now, we're still valid
     my $sql = "SELECT count( lock_id ) FROM locks WHERE lock_id == $id AND expires >= $now;";
 
-#    print "*** '$sql' ***\n";
-
-    my $out = $self->{'dbh'}->selectall_arrayref( $sql )->[0] or die $DBI::errstr;
+    my $out = $self->{'dbh'}->selectall_arrayref( $sql )->[0] or croak $DBI::errstr;
 
     return  $out;
 }

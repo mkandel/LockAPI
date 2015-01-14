@@ -68,6 +68,9 @@ sub startup {
     
     ## Check by lock_id
     $r->get("/$api_vers/check/:lock_id"   )->to( "action-check#check" );
+    
+    ## Delete by lock_id
+    $r->get("/$api_vers/delete/:lock_id"   )->to( "action-delete#delete" );
 
     ## Default
     $r->get('/v1/' )->to(

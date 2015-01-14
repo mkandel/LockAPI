@@ -2,17 +2,17 @@
 /add/:resource/:service/:product/:host/:user/:app/:expires/:?extra
 
 /delete/:lockId
-/delete/:resource/:service/:product/:host/:user/:app
+TODO: /delete/:resource/:service/:product/:host/:user/:app
 
 /check/:lockId
 /check/:resource/:service/:product/:host/:user/:app
 
-/list/
-/list/:resource/:service/:product/:host/:user/:app
+TODO: /list/
+TODO: /list/:resource/:service/:product/:host/:user/:app
 ## Maybe ...
-/list/filter/:filter
+TODO: /list/filter/:filter
 
-/modify/:lockId/:expires/:user/:app/:?extra
+TODO: /modify/:lockId/:expires/:user/:app/:?extra
 
 ---------------------------------------------
 Key:
