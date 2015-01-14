@@ -8,12 +8,9 @@ sub new {
     my $class = shift;
     my $self = {};
 
-    #use Cwd;
-    #my $dir = getcwd;
-    #$dir =~ s/.build.*//;
-
-    #my $db    = $dir . '/data/LockDB.sqlite';
-    my $db    = 'data/LockDB.sqlite';
+    my $config = LockAPI::Config->new();
+    my $dir    = $config->db_path();
+    my $db    = $dir . '/LockDB.sqlite';
 
     my $self->{'dbh'}   = DBI->connect("dbi:SQLite:dbname=$db","","", { RaiseError => 1}) or croak $DBI::errstr;
     $self->{'table'} = 'locks';
