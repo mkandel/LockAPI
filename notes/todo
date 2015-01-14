@@ -2,3 +2,5 @@
 * Use config to instantiate proper DB type
 * SQL/DB setup for DBs other than SQLite which is the first DB I'm doing
 * Move $db into the object $self->{'_db'}
+* Authentication - so one user cannot delete/modify another user's lock
+* Cronjob/daemon for removing expired locks
