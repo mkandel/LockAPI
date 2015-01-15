@@ -1,7 +1,7 @@
 package LockAPI::Action::Add;
 use Mojo::Base 'Mojolicious::Controller';
 use Carp;
-use YAML::Syck;
+use JSON::XS;
 use URI::Escape;
 use Data::Dumper;
 
@@ -21,8 +21,9 @@ sub add {
 #        'dryrun'     => 1,
     };
 
-    my $status = 200; ## Assume OK until something borks ...
-    my $ret->{'status'} = $status; ## Not sure what I was thinking with both of these but whatever ...
+#    my $status = 200; ## Assume OK until something borks ...
+#    my $ret->{'status'} = $status; ## Not sure what I was thinking with both of these but whatever ...
+    my $ret;
     my $stash = $self->stash();
 
     $conf->{'service'  } = $stash->{'service'};
@@ -39,25 +40,27 @@ sub add {
         $conf->{'expires'} = $created + ( 60 * 60 * 24 ); ## default to 24 hours after created time
     }
 
-
     eval{
-        $ret = $db->add( $confg );
+        $ret = $db->add( $conf );
     };
 
     my $text = '';
     if ( $@ ){
         if ( $@ =~ m/UNIQUE constraint failed/ ){
-            $text .= "UNIQUE constraint failed\n";
+            $text .= "*UNIQUE constraint failed*\n";
+            $ret->{'error_msg' } = 'FALIED - Lock already exists';
         } else {
             $text .= "Unknown DB Error encountered:\n<BR>\n";
+            $ret->{'error_msg' } = 'Unknown DB Error encountered';
             croak $@;
         }
+        $ret->{'status'} = 598;
     }
 
     $self->stash->{'lock_id'} = $ret->{'lock_id'};
 
 
-    if ( $ret && defined $self->{'debug'} ){
+    if ( $ret && $self->{'debug'} ){
         $text .= "\n<HR><PRE>\n";
         $text .= Dumper $stash;
         $text .= "\n</PRE>\n";
@@ -68,7 +71,8 @@ sub add {
     }
 
     $self->app->log->debug("$text");
-    $self->render( text => "$text", status => $ret->{'status'} );
+    $self->render( json => $ret );
+    #$self->render( text => $ret, status => $ret->{'status'} );
 }
 
 1;
@@ -78,6 +82,7 @@ __END__
 my $sql = "
     INSERT INTO locks ( service, product, host, user, caller, created, expires, extra, fingerprint )
     VALUES (
+        $self->{'resource'},
         $self->{'service'},
         $self->{'product'},
         $self->{'host'},
@@ -90,5 +95,5 @@ my $sql = "
     );";
 
 ##
-## Fingerprint is calculated by LockAPI::DB::Sqlite
+## Fingerprint is calculated by LockAPI::Utils->fingerprint()
 ##

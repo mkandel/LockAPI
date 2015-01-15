@@ -13,10 +13,10 @@ our $VERSION = '0.01';
 sub startup {
     my $self = shift;
 
-    $self->app->log->new( path => "/tmp/lockapi.log" );
-
-    my $config = LockAPI::Config->new();
+    my $config = LockAPI::Config->new({ debug => 1 });
     my $api_vers = $config->api_version() || 'v1';
+
+    $self->app->log->new( path => $config->log_dir() || "/tmp/lockapi_server.log" );
 
     ## We can change the DB type by changing this logic to config based:
     my $db = LockAPI::DB::Sqlite->new();
@@ -59,15 +59,26 @@ sub startup {
 
 =cut
 
-    ## GET
-    foreach my $action ( qw{ list check } ){
-        $r->get("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller"   )->to( "action-$action#$action" );
-    }
     ## ping link
-    $r->get("/$api_vers/ping"   )->to( "action-ping#ping" );
+    $r->get("/$api_vers/ping"             )->to( "action-ping#ping" );
+    
+    ## list all link
+    $r->get("/$api_vers/list"             )->to( "action-list#list" );
+    ## Count the locks
+    $r->get("/$api_vers/list/count"       )->to( "action-list#count" );
+    ## list all link
+    $r->get("/$api_vers/list/:filter"     )->to( "action-list#list_filtered" );
+    ## list all link
+    $r->get("/$api_vers/list/:filter/count"     )->to( "action-list#count_filtered" );
     
     ## Check by lock_id
     $r->get("/$api_vers/check/:lock_id"   )->to( "action-check#check" );
+    ## Check by fingerprint
+    $r->get("/$api_vers/check/:resource/:service/:product/#host/:user/#caller"
+                                          )->to( "action-check#check" );
+    
+    ## Delete by lock_id
+    $r->get("/$api_vers/delete/:lock_id"  )->to( "action-delete#delete" );
 
     ## Default
     $r->get('/v1/' )->to(
