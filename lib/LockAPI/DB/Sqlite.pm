@@ -14,6 +14,8 @@ sub new {
     my $dir    = $config->db_path();
     my $db    = $dir . '/LockDB.sqlite';
 
+    $self->{ '_db' } = $db;
+
     my $self->{'dbh'}   = DBI->connect("dbi:SQLite:dbname=$db","","",
         { 
             RaiseError => 1,
@@ -114,6 +116,17 @@ sub add {
 }
 
 sub list {
+    my $self = shift;
+
+    ## ASC is default ORDER BY
+    my $sql = "SELECT * FROM locks;";
+
+    my $out = $self->{'dbh'}->selectall_arrayref( $sql ) or croak $DBI::errstr;
+#    print Dumper $out;
+    return $out;
+}
+
+sub list_filtered {
     my $self = shift;
     my $conf = shift || croak "Cannot list entry without data ...\n";
 

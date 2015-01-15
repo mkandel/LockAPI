@@ -1,18 +1,6 @@
-    foreach my $action ( qw{ add delete modify } ){
-        ## These need to be PUT but for testing in a browser ... need to use ANY ...
-        #$r->put("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(:expires)", expires => qr/\d+/  )->to("action-$action#$action" );
-        $r->any("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(:expires)", expires => qr/\d+/  )->to("action-$action#$action" );
-        #$r->put("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(:expires)/(*extra"), expires => qr/\d+/  )->to("action-$action#$action" );
-        $r->any("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(:expires)/(*extra)", expires => qr/\d+/  )->to("action-$action#$action" );
-        #$r->put("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(*extra)"  )->to("action-$action#$action" );
-        $r->any("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller/(*extra)"  )->to("action-$action#$action" );
-        #$r->put("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
-        $r->any("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller"  )->to("action-$action#$action" );
-    }
-
 # NAME
 
-LockAPI - REST based centralized locking service
+LockAPI - REST based, centralized locking service
 
 # SYNOPSIS
 
@@ -20,7 +8,7 @@ LockAPI - REST based centralized locking service
 
 # DESCRIPTION
 
-LockAPI is
+LockAPI is a centralized, database backed, REST API that provides consistent resource locking across multiple hosts.
 
 # AUTHOR
 

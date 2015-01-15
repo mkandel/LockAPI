@@ -59,18 +59,26 @@ sub startup {
 
 =cut
 
-    ## GET
-    foreach my $action ( qw{ list check } ){
-        $r->get("/$api_vers/$action/:resource/:service/:product/#host/:user/#caller"   )->to( "action-$action#$action" );
-    }
     ## ping link
-    $r->get("/$api_vers/ping"   )->to( "action-ping#ping" );
+    $r->get("/$api_vers/ping"             )->to( "action-ping#ping" );
+    
+    ## list all link
+    $r->get("/$api_vers/list"             )->to( "action-list#list" );
+    ## Count the locks
+    $r->get("/$api_vers/list/count"       )->to( "action-list#count" );
+    ## list all link
+    $r->get("/$api_vers/list/:filter"     )->to( "action-list#list_filtered" );
+    ## list all link
+    $r->get("/$api_vers/list/:filter/count"     )->to( "action-list#count_filtered" );
     
     ## Check by lock_id
     $r->get("/$api_vers/check/:lock_id"   )->to( "action-check#check" );
+    ## Check by fingerprint
+    $r->get("/$api_vers/check/:resource/:service/:product/#host/:user/#caller"
+                                          )->to( "action-check#check" );
     
     ## Delete by lock_id
-    $r->get("/$api_vers/delete/:lock_id"   )->to( "action-delete#delete" );
+    $r->get("/$api_vers/delete/:lock_id"  )->to( "action-delete#delete" );
 
     ## Default
     $r->get('/v1/' )->to(
