@@ -14,7 +14,7 @@ sub add {
 
     my $created = time;
 
-    my $db = LockAPI::DB::Sqlite->new();
+    my $db = $self->app->db();
 
     my $conf = {
         'debug'      => 1,
@@ -24,6 +24,7 @@ sub add {
 #    my $status = 200; ## Assume OK until something borks ...
 #    my $ret->{'status'} = $status; ## Not sure what I was thinking with both of these but whatever ...
     my $ret;
+    $ret->{ 'payload' } = undef;
     my $stash = $self->stash();
 
     $conf->{'service'  } = $stash->{'service'};
