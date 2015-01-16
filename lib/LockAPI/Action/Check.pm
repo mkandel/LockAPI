@@ -25,7 +25,7 @@ sub check {
 
     my $text = '';
 
-    my $db = LockAPI::DB::Sqlite->new();
+    my $db = $self->app->db();
 
     ## if lock_id == -1 we're checking by fingerprint, otherwise by id:
     if ( $conf->{'lock_id'} == -1 ){
@@ -54,7 +54,19 @@ sub check {
         $text .= dumper_html( $ret );
     }
 
+    if ( $self->app->debug() ){
+    #if ( $self->app->config->debug() == 1 ){
+        $text .= '<BR>';
+        $text .= dumper_html( $self );
+    }
+
+#    $text .= '<BR>';
+#    $text .= dumper_html( $self->app );
+
     $self->render( text => "$text", status => $ret->{'status'} );
+}
+
+sub check_fprint {
 }
 
 1;

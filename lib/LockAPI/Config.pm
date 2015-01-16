@@ -5,8 +5,10 @@ use Carp;
 
 sub new {
     my $class = shift;
-    my $self = shift || {};
+    my $attrs = shift || {};
     my $conf_dir;
+
+    my $self;
 
     print "Checking for '$ENV{HOME}/.lockapirc'\n" if $self->{ 'debug' };
     if ( -e "$ENV{HOME}/.lockapirc" ){
@@ -33,6 +35,7 @@ sub new {
         'api_version'  => '^\w+$',
         'log_dir'      => '',
         'db_path'      => '',
+        'debug'        => '\d+',
     };
     ## Automatic getter/setter creation
     ## Use for simple get_foo set_foo creation
@@ -62,23 +65,11 @@ sub new {
             }
             return $self->{ 'conf' }->{ $field };
         };
-        ## I only want an accessor, not getter/setter as separate methods
-#        my $gfunc = __PACKAGE__ . "::get_" . $field;
-#        print "creating $gfunc()\n";
-#
-#        # Add getter subroutine to the symbol table
-#        *$gfunc = sub {
-#            my $self = shift;
-#            if ( not exists $self->{ $field } ) {
-#                confess "$field must be set before it can be gotten";
-#            }
-#            if ( $self->{ $field } =~ /$rule/ ) {
-#                return $self->{ $field };
-#            } else {
-#                confess "Cannot get field '$field'.  Value '$self->{$field}', does not conform with rule '$self->{fields}{$field}'.";
-#            }
-#            return;
-#        };
+    }
+
+    ## Add passed in arguments to $self:
+    foreach my $attr ( keys %{ $attrs } ){
+        $self->$attr( $attrs->{ $attr } );
     }
 
     return $self;

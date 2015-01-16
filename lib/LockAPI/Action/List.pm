@@ -7,7 +7,7 @@ sub list {
     my $self   = shift;
     my $status = 200;
 
-    my $db = LockAPI::DB::Sqlite->new();
+    my $db = $self->app->db();
 
     my $val = $db->list();
     my $text = dumper_html( $val );
@@ -19,7 +19,7 @@ sub count {
     my $self   = shift;
     my $status = 200;
 
-    my $db = LockAPI::DB::Sqlite->new();
+    my $db = $self->app->db();
 
     my $val = $db->list();
     my $text = scalar @{ $val };
@@ -32,7 +32,7 @@ sub list_filtered {
     my $filter = shift;
     my $status = 200;
 
-    my $db = LockAPI::DB::Sqlite->new();
+    my $db = $self->app->db();
 
     my $val = $db->list_filtered();
     my $text = dumper_html( $val );
@@ -45,7 +45,7 @@ sub count_filtered {
     my $filter = shift;
     my $status = 200;
 
-    my $db = LockAPI::DB::Sqlite->new();
+    my $db = $self->app->db();
 
     my $val = $db->list_filtered();
     my $text = scalar @{ $val };
