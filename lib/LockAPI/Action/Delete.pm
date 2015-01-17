@@ -11,7 +11,7 @@ sub delete {
 
 #    my $text = dumper_html( $stash );
 
-    my $db = LockAPI::DB::Sqlite->new();
+    my $db = $self->app->db();
 
     my $lock_id = $stash->{'lock_id'} || croak "delete requires a lock_id!";
 

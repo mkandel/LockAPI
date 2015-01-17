@@ -1,6 +1,6 @@
 # NAME
 
-LockAPI - REST based, centralized locking service
+LockAPI - REST based centralized locking service
 
 # SYNOPSIS
 
@@ -8,7 +8,7 @@ LockAPI - REST based, centralized locking service
 
 # DESCRIPTION
 
-LockAPI is a centralized, database backed, REST API that provides consistent resource locking across multiple hosts.
+LockAPI is
 
 # AUTHOR
 
