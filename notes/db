@@ -1,19 +1,8 @@
 lockId - integer - autoincrement - unique - non null - primary key
 resource - varchar(100) - not null
-service - varchar(100) - not null
-product - varchar(100) - not null
 host - varchar(200) - not null
 created - epoch_time - not null
 expires - epoch_time - not null - default create + 24 hours?
 user - varchar(100) - not null
 app - varchar(100) - not null
 extra - blob
-
-DSM metadata:
-action: restorea                |
-dataset: 2561                   |
-host: app361.lab1.ariba.com     | X
-product: buyer                  | X
-service: dev2                   | X
-status: Finished                |
-user: svcdev2                   | X

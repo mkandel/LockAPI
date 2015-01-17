@@ -41,11 +41,11 @@ sub startup {
     ## API v1 routes
     ## PUT
     ## add:
-    $r->any("/$api_vers/add/:resource/:service/:product/#host/:user/#caller"  )->to("action-add#add" );
-    $r->any("/$api_vers/add/:resource/:service/:product/#host/:user/#caller/:expires" )->to("action-add#add" );
-    $r->any("/$api_vers/add/:resource/:service/:product/#host/:user/#caller/:expires/(*extra)" )
+    $r->any("/$api_vers/add/:resource/#host/:user/#caller"  )->to("action-add#add" );
+    $r->any("/$api_vers/add/:resource/#host/:user/#caller/:expires" )->to("action-add#add" );
+    $r->any("/$api_vers/add/:resource/#host/:user/#caller/:expires/(*extra)" )
         ->to("action-add#add" );
-    $r->any("/$api_vers/add/:resource/:service/:product/#host/:user/#caller/(*extra)" )->to("action-add#add" );
+    $r->any("/$api_vers/add/:resource/#host/:user/#caller/(*extra)" )->to("action-add#add" );
 
     ## ping links
     $r->get("/$api_vers/ping"             )->to( "action-ping#ping" );
@@ -63,7 +63,7 @@ sub startup {
     ## Check by lock_id
     $r->get("/$api_vers/check/:lock_id"   )->to( "action-check#check" );
     ## Check by fingerprint
-    $r->get("/$api_vers/check/:resource/:service/:product/#host/:user/#caller" )->to( "action-check#check_fprint" );
+    $r->get("/$api_vers/check/:resource/#host/:user/#caller" )->to( "action-check#check_fprint" );
     
     ## Delete by lock_id
     $r->get("/$api_vers/delete/:lock_id"  )->to( "action-delete#delete" );

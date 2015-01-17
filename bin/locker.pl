@@ -35,7 +35,7 @@ my $dryrun = 0;
 my $conf = LockAPI::Config->new({ 'debug' => $debug });
 
 my $user = getlogin;
-my ( $product, $service, $host, $app, $expires, $extra_JSON, $lock_id, $resource );
+my ( $host, $app, $expires, $extra_JSON, $lock_id, $resource );
 my $lock_srv = $conf->server()    || 'localhost';
 my $srv_port = $conf->port()      || 3000;
 my $api_vers = $conf->api_version || 'v1';
@@ -47,14 +47,12 @@ GetOptions(
     "debug|d"        => \$debug,
     "dryrun|n"       => sub { $dryrun = 1; $debug = 1; },
     "user|u=s"       => \$user,
-    "product|p=s"    => \$product,
     "resource|r=s"   => \$resource,
-    "service|s=s"    => \$service,
     "host|o=s"       => \$host,
     "app|a=s"        => \$app,
     "expires|e=i"    => \$expires,
     "extra|x=s"      => \$extra_JSON,
-    "server|v=s"     => \$lock_srv,
+    "server|s=s"     => \$lock_srv,
     "port|t=i"       => \$srv_port,
 ) || pod2usage( 1 );
 
@@ -68,8 +66,6 @@ pod2usage( -verbose => 1, -message => "Invalid action '$action'!!" ) unless grep
 
 ## Validate arguments:
 pod2usage( -verbose => 1, -message => "Missing argument 'user'!!"    ) unless $user;
-pod2usage( -verbose => 1, -message => "Missing argument 'product'!!" ) unless $product;
-pod2usage( -verbose => 1, -message => "Missing argument 'service'!!" ) unless $service;
 pod2usage( -verbose => 1, -message => "Missing argument 'host'!!"    ) unless $host;
 pod2usage( -verbose => 1, -message => "Missing argument 'app'!!"     ) unless $app;
 #pod2usage( -verbose => 1, -message => "Missing argument 'expires'!!" ) unless $expires;
@@ -82,12 +78,10 @@ $expires = $expires || time + ( 60 * 60 * 24 );
 $extra_JSON = $extra_JSON || '';
 
 my $method = $LockAPI::Constants::method_for{ $action };
-my $url = "http://$lock_srv/$api_vers/$action/$resource/$service/$product/$host/$user/$app/$expires/$extra_JSON";
+my $url = "http://$lock_srv/$api_vers/$action/$resource/$host/$user/$app/$expires/$extra_JSON";
 
 if ( $debug ){
     print "Action  : '$action'\n";
-    print "Product : '$product'\n";
-    print "Service : '$service'\n";
     print "Resource: '$resource'\n";
     print "Host    : '$host'\n";
     print "App     : '$app'\n";
@@ -187,14 +181,6 @@ Enable debugging and disable notifications
 
 username of user requesting the lock
 
-=item B<--product|-p>
-
-product you want to lock
-
-=item B<--service|-s>
-
-service you want to lock
-
 =item B<--host|-o>
 
 hostname of the machine you wish to lock
@@ -226,12 +212,4 @@ Marc Kandel C<< <marc.kandel.cpan at gmail.com> >>
 =cut
 
 __END__
-
-service    - logical environment (dev3/load3)
-product    - product being worked on (buyer/s4/auc)
-host       - host being locked
-user       - user requesting the lock
-app        - application requesting the lock.  could possibly be the same as 'product' but not in the case of Ops Tools
-extra      - optional hash of metadata relating to the lock
-expires    - time lock expires.  if no time given, default to some # of hours from 'add' time
 

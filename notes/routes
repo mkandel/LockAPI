@@ -1,14 +1,14 @@
-/add/:resource/:service/:product/:host/:user/:app/:?extra
-/add/:resource/:service/:product/:host/:user/:app/:expires/:?extra
+/add/:resource/:host/:user/:app/:?extra
+/add/:resource/:host/:user/:app/:expires/:?extra
 
 /delete/:lockId
-TODO: /delete/:resource/:service/:product/:host/:user/:app
+TODO: /delete/:resource/:host/:user/:app
 
 /check/:lockId
-/check/:resource/:service/:product/:host/:user/:app
+/check/:resource/:host/:user/:app
 
 TODO: /list/
-TODO: /list/:resource/:service/:product/:host/:user/:app
+TODO: /list/:resource/:host/:user/:app
 ## Maybe ...
 TODO: /list/filter/:filter
 
@@ -21,10 +21,8 @@ Key:
 
 Glossary:
 resource   - the resource you're locing.  Can be anything, network port, a file, a script, anything
-service    - logical environment (dev3/load3)
-product    - product being worked on (buyer/s4/auc)
 host       - host being locked
 user       - user requesting the lock
-app        - application requesting the lock.  could possibly be the same as 'product' but not in the case of Ops Tools
-extra      - optional hash of metadata relating to the lock
+app        - application requesting the lock
+extra      - optional JSON encoded hash of metadata relating to the lock
 expires    - time lock expires.  if no time given, default to some # of hours from 'add' time

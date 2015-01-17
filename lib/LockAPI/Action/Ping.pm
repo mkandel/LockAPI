@@ -2,14 +2,6 @@ package LockAPI::Action::Ping;
 use Mojo::Base 'Mojolicious::Controller';
 use Carp;
 
-#sub new {
-#    my $class = shift;
-#
-#    my $self = @_;
-#
-#    return bless $self, $class;
-#}
-
 sub ping {
     my $self = shift;
 

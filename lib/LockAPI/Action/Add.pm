@@ -27,9 +27,7 @@ sub add {
     $ret->{ 'payload' } = undef;
     my $stash = $self->stash();
 
-    $conf->{'service'  } = $stash->{'service'};
     $conf->{'resource' } = $stash->{'resource'};
-    $conf->{'product'  } = $stash->{'product'};
     $conf->{'host'     } = $stash->{'host'};
     $conf->{'user'     } = $stash->{'user'};
     $conf->{'caller'   } = $stash->{'caller'};
@@ -81,18 +79,16 @@ sub add {
 __END__
 
 my $sql = "
-    INSERT INTO locks ( service, product, host, user, caller, created, expires, extra, fingerprint )
+    INSERT INTO locks ( host, user, caller, created, expires, extra, fingerprint )
     VALUES (
         $self->{'resource'},
-        $self->{'service'},
-        $self->{'product'},
         $self->{'host'},
         $self->{'user'},
         $self->{'caller'},
         $self->{'created'},
         $self->{'expires'},
         $self->{'extra'},
-        "$self->{'service'}_$self->{'product'}_$self->{'host'}"
+        "$self->{'fingerprint'},
     );";
 
 ##

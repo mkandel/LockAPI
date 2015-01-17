@@ -43,18 +43,14 @@ sub add {
     $ret->{'status'} = 200;
 
     my $fprint = fingerprint( { 
-            service  => $conf->{'service'},
-            product  => $conf->{'product'},
             host     => $conf->{'host'},
             resource => $conf->{'resource'},
     } );
 
     my $sql =
-        "INSERT INTO $self->{'table'} ( resource, service, product, host, user, caller, created, expires, extra, fingerprint )
+        "INSERT INTO $self->{'table'} ( resource, host, user, caller, created, expires, extra, fingerprint )
         VALUES (
             '$conf->{'resource'}',
-            '$conf->{'service'}',
-            '$conf->{'product'}',
             '$conf->{'host'}',
             '$conf->{'user'}',
             '$conf->{'caller'}',
@@ -175,8 +171,6 @@ sub check_fingerprint {
     $self->{'log'}->debug( Dumper $conf );
 
     my $fprint = fingerprint( {
-            service  => $conf->{'service'},
-            product  => $conf->{'product'},
             host     => $conf->{'host'},
             resource => $conf->{'resource'},
     } );
@@ -195,10 +189,8 @@ CREATE TABLE locks (
     lock_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
     caller TEXT NOT NULL,
     user TEXT NOT NULL,
-    product TEXT NOT NULL,
     expires INTEGER NOT NULL,
     extra BLOB,
-    service TEXT NOT NULL,
     created INTEGER NOT NULL,
     host TEXT NOT NULL,
     fingerprint TEXT UNIQUE NOT NULL

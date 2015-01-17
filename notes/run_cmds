@@ -1,11 +1,5 @@
-./bin/locker.pl add -s service -p product -o some.host.nam -u user -a something.pl -x '{"three":3,"six":6,"five":5,"seven":7,"two":2,"one":1,"zero":0,"nine":9,"eight":8,"four":4}' -r some-resource -d
+./bin/locker.pl add -o some.host.nam -u user -a something.pl -x '{"three":3,"six":6,"five":5,"seven":7,"two":2,"one":1,"zero":0,"nine":9,"eight":8,"four":4}' -r some-resource -d
 
-./bin/locker.pl add -s service -p product -o some.host.nam -u user -a something.pl -r some-resource -d
+./bin/locker.pl add -o some.host.nam -u user -a something.pl -r some-resource -d
 
-./bin/locker.pl list -s service -p product -o some.host.nam -u user -a something.pl -r some-resource -d
-
-./bin/locker.pl add -d -s qa -p buyer -o hydra.lab1.ariba.com -u svcqa -a myscript.pl -r some-resource -x %7B%22eight%22%3A8%2C%22three%22%3A3%2C%22six%22%3A6%2C%22four%22%3A4%2C%22one%22%3A1%2C%22nine%22%3A9%2C%22five%22%3A5%2C%22zero%22%3A0%2C%22two%22%3A2%2C%22seven%22%3A7%7D
-
-INSERT INTO locks ( service, product, host, user, caller, created, expires, extra, fingerprint ) VALUES ( 'dev5', 's4', 'hydra.ariba.com', 'mondev5', 'test.pl', 1395356423, 2790712846, '%7B%22eight%22%3A8%2C%22three%22%3A3%2C%22six%22%3A6%2C%22four%22%3A4%2C%22one%22%3A1%2C%22nine%22%3A9%2C%22five%22%3A5%2C%22zero%22%3A0%2C%22two%22%3A2%2C%22seven%22%3A7%7D', 'dev5_s4_hydra.ariba.com' );
-
-http://localhost:3000/v1/add/service/product/some.host.nam/user/something.pl/-1/%7B%22three%22:3,%22six%22:6,%22five%22:5,%22seven%22:7,%22two%22:2,%22one%22:1,%22zero%22:0,%22nine%22:9,%22eight%22:8,%22four%22:4%7D
+./bin/locker.pl list -o some.host.nam -u user -a something.pl -r some-resource -d
