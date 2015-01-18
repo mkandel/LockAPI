@@ -5,6 +5,7 @@ TODO:
 * Authentication - so one user cannot delete/modify another user's lock
 * Cronjob/daemon for removing expired locks - sctipt added, need to either daemonize it or cron it.
 * MORE UNIT TESTS!!!!!
+* Make a LockAPI::Lock object (Moose?) and ose and ORM for the DB crap
 
 Action Add:
     * If insert fails for fingerprint, check the existing lock for expiration.  If it's expired, we should be able to create one for the given resource.
